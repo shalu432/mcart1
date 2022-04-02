@@ -1,0 +1,18 @@
+const express = require('express')
+const router = express.Router()
+const Product = require('../model/productschema')
+const midd  =require ("../middleware/middleware")
+
+const prod = require('../controller/productcontroller')
+//const { Router } = require('express')
+router.get('/getAllProduct',midd.midJWT,prod.getAllProduct)
+//router.get('/getProductby',midd.midJWT,prod.getProductByMerchant)
+router.get('/getProduct/:id',midd.midJWT,prod.getProductBYId)
+router.get('/productRecord',midd.midJWT,prod.productRecord)
+//router.get('/searchProduct',midd.midJWT,prod.searchProduct)
+//router.get('/sortRecord',midd.midJWT,prod.sortRecord)
+//router.get('/filterProduct',midd.midJWT,prod.filterProduct)
+router.post('/addProduct',midd.midJWT,prod.addProductbyMerchant)
+ router.put('/updateProduct/:id',midd.midJWT,prod.updateProductbyMerchant)
+ router.delete('/deleteProduct/:id',midd.midJWT,prod.deleteProductbyMerchant)
+module.exports = router
