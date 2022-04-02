@@ -18,6 +18,7 @@ const addMerchant = async (req, res) => {
         else {
             const data = new Merchant({
                 //  name :req.body.name,
+                //data
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
 

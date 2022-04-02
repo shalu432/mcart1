@@ -3,7 +3,7 @@ const router = express.Router()
  const Cart = require('../model/cartschema')
  const addProductToCart = async (req, res) => {
 //cart
-//
+
     const val = new Cart({
         productName: req.body.productName,
         baseCost: req.body.baseCost,

@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 var bodyParser= require('body-parser')
-mongoose.connect("mongodb://localhost:27017/mcart",{})
+mongoose.connect("mongodb+srv://shalu:Shalu123@cluster0.mnb96.mongodb.net/mcart?retryWrites=true&w=majority",{})
 .then(()=>console.log("connected"))
 .catch((err)=>console.log(err))
 //console.log("hello")
@@ -25,7 +25,7 @@ app.use('/',ProductRouter)
 //app.use('/admin',AdminRouter)
 
 const MerchantRouter = require('./routes/merchant')
-app.use('/',MerchantRouter)
+app.use('/merchant',MerchantRouter)
 const CategoryRouter = require('./routes/category')
 app.use('/',CategoryRouter)
 
