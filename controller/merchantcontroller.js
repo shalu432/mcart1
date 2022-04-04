@@ -94,7 +94,7 @@ const loginMerchant = (req, res) => {
                             code:"200",
                             error:{},
                            message:"successfully authorized",
-                            email: data[0].email,
+                            Email: data[0].Email,
 
                             token: token
 

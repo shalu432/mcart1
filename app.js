@@ -32,13 +32,17 @@ app.use('/',CategoryRouter)
   const cartRouter = require('./routes/cart')
    app.use('/',cartRouter)
 
-app.get('/',function(req,res)
-{
-  res.send("working")
-})
+// app.get('/',function(req,res)
+// {
+//   res.send("working")
+// })
 
 
 const port = process.env.PORT ||7500
 app.listen(port, () => {
     console.log('Server started')
 })
+
+
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDg5MDYzMjcsImV4cCI6MTY0ODk5MjcyN30.lYC-VTCX_pbFnSArbxjTkB9uGN1A8soVb4IrcSVAQLE

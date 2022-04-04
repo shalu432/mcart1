@@ -45,7 +45,7 @@ const CustomerSchema = new mongoose.Schema({
       
 
    
-    Email:
+    email:
     {
         type: String,
         unique: true,
@@ -69,22 +69,15 @@ const CustomerSchema = new mongoose.Schema({
         type:mongoose.SchemaTypes.ObjectId,
         ref:"Addresses"
             
-     }]
-        
+     }],
+  
 
-        
-    
-       
-    })
+ cardItems:[{
+type:mongoose.SchemaTypes.ObjectId,
+ref:'Cart'
+ }]
 
- 
-// CustomerSchema.methods.generateJWT = function () {
-//     const token = jwt.sign({
-//         _id: this._id,
-//         phoneNumber: this.phoneNumber
-//     }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
-//     return token
-// },
+})
    
 module.exports = mongoose.model('Customer', CustomerSchema)
 

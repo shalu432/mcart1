@@ -82,6 +82,16 @@ const productRecord = (req, res, next) => {
 
 const addProductbyMerchant = async (req, res) => {
 
+    var quantity = req.body.quantity;
+    var available=avail(quantity);
+    function avail(q){
+        if(q>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     const val = new Product({
         productName: req.body.productName,
         baseCost: req.body.baseCost,
@@ -90,11 +100,13 @@ const addProductbyMerchant = async (req, res) => {
 
         discount: req.body.discount,
         discountedCost:(req.body.baseCost-(req.body.discount*req.body.baseCost/100)),
-        quantity: req.body.quantity,
+       
        size: req.body.size,
         categoryName:req.body.categoryName,
     
-        brandName:req.body.brandName
+        brandName:req.body.brandName,
+        quantity: req.body.quantity,
+        available:available
         
 
 

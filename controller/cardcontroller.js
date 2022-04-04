@@ -18,7 +18,7 @@ const addPayment = async(req,res)=>{
     var cvv = req.body.cvv;
     var expdate = req.body.expdate
      // console.log(req.body)
-    var paymentId = key.randomBytes(5).toString('hex')
+    var paymentId = key.randomBytes(6).toString('hex')
     //console.log(rollnumber)
      var token =await Customer.find({email:email})
      if(token.length!=0){
@@ -49,21 +49,41 @@ else{
 const updatePayment=async (req,res) => {
     
    // var {cardnumber,cardname,cardholdername,cvv,expdate} = res.body;
+// await Customer.findOne({_id:req.query.id})
+ //{
+ 
    var cardnumber = req.body.cardnumber;
+
  //  var cardname = req.body.cardname;
    var cardholdername = req.body.cardholdername;
    var cvv = req.body.cvv;
    var expdate = req.body.expdate
     const key = req.params.key
-    var value = await Payment.updateOne({paymentId:key},{$set:{cardnumber,cardname,cardholdername,cvv,expdate}});
+    var value = await Payment.updateOne({paymentId:key},{$set:{cardnumber,cardholdername,cvv,expdate}});
     res.send(value) 
     console.log(value)
    
+}
+//}
+const deleteCard = async(req,res)=>
+{
+    try {
+        const val = await Payment.findByIdAndDelete(req.params.id)
+        res.json({
+            status:"true",
+            code:200,
+            message:"deleted successfully",
+            response:val,
+        })
+    } catch (err) {
+        res.send('Error')
+    }
 }
 
 
 module.exports={
     addPayment,
-    updatePayment
+    updatePayment,
+    deleteCard
 }
 

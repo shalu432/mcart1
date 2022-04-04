@@ -31,7 +31,7 @@ const addCustomer = async(req,res) => {
                  Gender: req.body.Gender,
                 DOB: req.body.DOB,
                 phoneNumber: req.body.phoneNumber,
-                Email: req.body.Email,
+                email: req.body.email,
                 countryCode: req.body.countryCode,
 
                
@@ -44,7 +44,7 @@ const addCustomer = async(req,res) => {
          Gender: req.body.Gender,
         DOB: req.body.DOB,
         phoneNumber: req.body.phoneNumber,
-        Email: req.body.Email,
+        email: req.body.email,
         countryCode: req.body.countryCode,
         
 
@@ -74,7 +74,7 @@ const addr= await Address.findOne({
    // console.log(addr)
 
    await Customer.updateOne(
-      { Email:req.body.Email},
+      { email:req.body.email},
       {$push:{address:addr._id}}
    ).populate("address") .then(() => {
     res.status(200).json({
@@ -200,7 +200,7 @@ const verifyOtp= (req,res)=>
                  Gender: req.body.Gender,
                 DOB: req.body.DOB,
                 phoneNumber: req.body.phoneNumber,
-                Email: req.body.Email,
+                email: req.body.email,
                 countryCode: req.body.countryCode,
                 //address: req.body.address,
                  
@@ -222,10 +222,74 @@ const verifyOtp= (req,res)=>
   })
 
 }
+const updateAddress = async(req,res)=> {
 
-const updateAddress = async(req,res)=>
-{
-Customer.findOne({})
+var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
+  var flagaddress = await Address.findOne({_id:req.query.address},{})
+ // console.log(flagaddress,flagcustomer)
+  if(flagcustomer==null){
+    res.status(201).json({status:"false",
+    respone:"null",
+    code:"403",
+    errors:{
+        error_code:"failed_to_update",
+        error_msg:"invalid_customer_id"
+    },
+    message:"Unable_to_update_customer_address"
+    })
+  }
+  if(flagaddress==null){
+    res.status(201).json({status:"false",
+    respone:"null",
+    code:"403",
+    errors:{
+        error_code:"failed_to_update",
+        error_msg:"invalid_address_id"
+    },
+    message:"Unable_to_update_customer_address"
+    })
+  }
+   else if (flagcustomer!=null&&flagaddress!=null)
+    {
+      var houseNumber=req.body.houseNumber
+     var street=req.body.street
+     var Locality=req.body.Locality
+     var city=req.body.city
+     var pincode =req.body.pincode
+     
+    await Address.updateOne({ _id:req.query.address,customerId:req.query.customer },{
+      $set: {
+        houseNumber,street,Locality,city,pincode
+      }
+    }).then(() => res.status(201).json(
+      {status:"true",
+      respone:null,
+      code:"201",
+      errors:{
+      },
+      message:"address_updated_succesfully"
+    }))
+    .catch((err) => res.status(201).json({status:"false",
+    respone:"null",
+    code:"403",
+    errors:{
+        error_code:"failed_to_update",
+        error_msg:err
+    },
+    message:"Unable_to_update_customer_address"
+    }));
+    //resp.send(result)
+  }else{
+    res.status(201).json({status:"false",
+    respone:"null",
+    code:"403",
+    errors:{
+        error_code:"Authorization_failed",
+        error_msg:"something_went_wrong"
+    },
+    message:"Unable_to_update_customer_address"
+    })
+  }
 }
 
 
@@ -250,6 +314,8 @@ module.exports={
     deleteCustomer,
     loginUser,
     verifyOtp,
-   
-   
+    updateAddress
 }
+   
+   
+
