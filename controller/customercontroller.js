@@ -221,13 +221,17 @@ const verifyOtp= (req,res)=>
      }) 
      
       const a1 = await cus.save()
-        res.send(a1)   
+        
+            res.status(200).json({
+                message : "successfully Updated",
+                response:a1
+        })   
    
   .then(()=>{
 
       res.status(200).json({
           message : "successfully Updated",
-          //response:cus
+          response:cus
       })
   }).catch((err)=>{
      console.log(err) 
