@@ -113,10 +113,19 @@ const loginMerchant = (req, res) => {
 }
 const getMerchant = async (req, res) => {
     try {
-        const vend = await Merchant.findById(req.params.id)
-        res.json(vend)
+        const val = await Merchant.find()
+        res.json({
+            status:true,
+            error:{},
+            response:val
+        })
     } catch (err) {
-        res.send('Error')
+        res.send({
+            error:{
+                status:false,
+                error:err
+            }
+        })
     }
 
 }
@@ -167,9 +176,15 @@ const updateMerchant = async (req, res) => {
 const deleteMerchant = async (req, res) => {
     try {
         const val = await Merchant.findByIdAndDelete(req.params.id)
-        res.json(val)
+      //  res.json(val)
+      res.json({
+        status:true,
+        error:{},
+        response:"merchant deleted successfully"})
     } catch (err) {
-        res.send('Error')
+        res.send({
+            error:err
+        })
     }
 }
 module.exports = {

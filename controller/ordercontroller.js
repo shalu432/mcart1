@@ -14,61 +14,83 @@ const getOrderDetails = async(req,res) => {
  }
  const addOrder = async(req,res)=>
  {
-   try{
   var customerId=req.query.customerId;
-  var cartId=req.query.cartId;
-  //var paymentId=req.query.paymentId;
-  //const addressId=req.query.addressId
-  const cart = await Cart.find({ customerId:customerId},{cartId:cartId});
-  console.log(cart)
-  
-  await Cart.deleteOne({ customerId: customerId },{cartId:cartId})
-  .then(()=>{
-      if(cart){
+ Cart.findOne({customerId:customerId})
+    .then(cart => {
+      if (!cart) {
+        return res.status(404).json({
+          message: "cart not found"
+        });
+      }
+      let status='Ordered';
+      const order = new Order({
+        // _id: mongoose.Types.ObjectId(),
+        // quantity: req.body.quantity,
+        // product: req.body.productId
+        customerId:customerId,
+                  items:cart.items,
+                  status:status,
+                  totalCost:cart.subTotal
+      });
+      return order.save();
+    })
+    .then(result => {
+      console.log(result);
+      res.status(201).json({
+        message: "Order stored",
+        createdOrder: {
+          customerId: result.customerId,
+          items: result.items,
+          totalCost: result.totalCost
+        },
        
-          // console.log(cart.map(item=>item.items));
-          // result.populate('items').execPopulate(() => {
-          //     res.send(result);
-          // });
-      //     function transaction(cId,pId){
-      //         try{
-      //              Payment.findOne({customerId:cId},{paymentId:pId}).then(data=>{
-      //                 let transactionid = crypto.randomBytes(6).toString('hex');
-      //                 console.log(transactionid);
-      //                 return transactionid;
-      //                 //status='Ordered'
-      //             })
-      //         }
-      //         catch{
-      //             res.json("Enable to Order");
-      //         }
-      // }
-          let status='Ordered';
-          //let indexFound = cart.items.map(item=>it;
-          //Order.items.push({i:cart});
-          //let transactionId=transaction(customerId,paymentId);
-          const orderdata={
-          customerId:customerId,
-          cartId:cartId,
-          items:cart.items,
-          status:status,
-          totalCost:cart.subTotal
-          //address:address,
-          //transactionId:transactionId
-          }
-          const order=new Order(orderdata);
-           order.save().then(()=>{
-              res.end('Order Successfully!');
-          })
-      }
-      else{
-          res.json("Add to cart");
-      }
-  })
-}catch(err){
-  res.json(err);
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
 }
- }
+
+
+
+
+
+
+//    try{
+//   var customerId=req.query.customerId;
+//   //var cartId=req.query.cartId;
+// const cart = await Cart.find({ customerId:customerId});
+//   //console.log(cart)
+  
+//   await Cart.deleteOne({ customerId: customerId },{cartId:cartId})
+//   .then(()=>{
+//       if(cart){
+       
+          
+//           let status='Ordered';
+//          const orderdata={
+//           customerId:customerId,
+//           cartId:cartId,
+//           items:cart.items,
+//           status:status,
+//           totalCost:cart.subTotal
+//          }
+//           const order=new Order(orderdata);
+//            order.save().then(()=>{
+//               res.end('Order Successfully!');
+//           })
+//       }
+//       else{
+//           res.json("Add to cart");
+//       }
+//   })
+// }catch(err){
+//   res.json(err);
+// }
+//  }
    
  
 module.exports={

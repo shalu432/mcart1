@@ -8,7 +8,7 @@ const Merchant= require('../model/merchantschema')
 
 
  const ven= require('../controller/merchantcontroller')
- router.get('/getmerchant/:id',ven.getMerchant)
+ router.get('/getmerchant',ven.getMerchant)
  router.post('/addmerchant',ven.addMerchant)
 router.post('/loginmerchant',ven.loginMerchant)
 router.put('/updatemerchant/:id',ven.updateMerchant)
