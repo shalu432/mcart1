@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Customer = require('../model/customerschema')
 const Cart = require('../model/cartschema')
+const Payment=require('../model/paymentschema')
 const OrderSchema = new mongoose.Schema({
     
   customerId:{

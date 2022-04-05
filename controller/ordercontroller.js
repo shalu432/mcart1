@@ -3,7 +3,7 @@ const router = express.Router()
 const Order = require('../model/orderschema')
 const Cart = require('../model/cartschema')
 const Customer = require('../model/customerschema')
-
+const Payment=require('../model/paymentschema')
 const getOrderDetails = async(req,res) => {
     try{
            const val = await Cart.find()

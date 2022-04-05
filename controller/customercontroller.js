@@ -15,9 +15,18 @@ const Address = require('../model/addressschema')
 const getCustomerbyMerchant= async(req,res) => {
     try{
            const cus = await Customer.find()
-           res.json(cus)
+           res.json({
+               status:200,
+               response:cus
+           })
     }catch(err){
-        res.send('Error ' + err)
+        res.send({
+            error:
+            {
+                message :"null",
+                error:error
+            }
+        })
     }
 }
 
