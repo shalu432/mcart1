@@ -16,15 +16,18 @@ const OrderSchema = new mongoose.Schema({
         {
           type : Number
         },
+        transactionid:{
+          type:String
+        },
       
-      // address: {
-      //   type:mongoose.Schema.Types.ObjectId,
-      //   ref:"Address",
-      // },
-      // paymentId: {
-      //   type: mongoose.Schema.Types.ObjectId,
-      //   ref:"Payment",
-      // },
+      address: {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Address",
+      },
+      paymentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Payment",
+       },
      
 
     

@@ -82,7 +82,8 @@ const addr= await Address.findOne({
         "code":200,
         "error": {
                 },
-    response:"successfully added"
+    message:"successfully added",
+    response:add
 
 
     })

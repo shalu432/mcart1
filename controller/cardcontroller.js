@@ -7,8 +7,10 @@ const router = express.Router()
 var key = require("crypto")
 
 const addPayment = async(req,res)=>{
-
-
+    try{
+        var customerId = req.query.customerId
+await Customer.findOne({_id:req.query.id})
+{
 
     if(req.body.cardnumber && req.body.cardname && req.body.cardholdername && req.body.cvv && req.body.expdate && (req.body.cardnumber.toString().length)>=16 && (req.body.cardnumber.toString().length)<=16 && req.body.cvv.toString().length>=3 && req.body.cvv.toString().length <=3)
    {
@@ -16,7 +18,7 @@ const addPayment = async(req,res)=>{
     //var lastName=req.body.lastName
     var email= req.body.email
     var cardnumber = req.body.cardnumber;
-    var cardname = req.body.cardname;
+   // var cardname = req.body.cardname;
     var cardholdername = req.body.cardholdername;
     var cvv = req.body.cvv;
     var expdate = req.body.expdate
@@ -29,6 +31,7 @@ const addPayment = async(req,res)=>{
         var data = {
     //  'firstName' : firstName,
     //  'lastName' : lastName,
+    'customerId':customerId,
      'email' : email,
      'cardnumber': cardnumber,
      // 'cardname' : cardname,
@@ -47,6 +50,11 @@ const addPayment = async(req,res)=>{
 else{
     res.json('Enter correct data');
 }}
+}
+catch(error){
+res.json("error")
+}
+}
 
 
 

@@ -14,83 +14,66 @@ const getOrderDetails = async(req,res) => {
  }
  const addOrder = async(req,res)=>
  {
-  var customerId=req.query.customerId;
- Cart.findOne({customerId:customerId})
-    .then(cart => {
-      if (!cart) {
-        return res.status(404).json({
-          message: "cart not found"
-        });
-      }
-      let status='Ordered';
-      const order = new Order({
-        // _id: mongoose.Types.ObjectId(),
-        // quantity: req.body.quantity,
-        // product: req.body.productId
-        customerId:customerId,
-                  items:cart.items,
-                  status:status,
-                  totalCost:cart.subTotal
-      });
-      return order.save();
+  try{
+    var customerId=req.query.customerId;
+    var paymentId=req.body.paymentId;
+    const addressId=req.query.addressId;
+    //await customerProfile.findOne({_id:ObjectId(customerId)}).then(data=>{})
+    const cart = await Cart.findOne({ customerId: customerId});
+    //console.log(cart);
+    //await customerProfile.findOne({_id:ObjectId(customerId)}).populate("address").then({
+    await Cart.deleteOne({ customerId: customerId })
+    .then(()=>{
+        if(cart){
+            let transId;
+            // console.log(cart.map(item=>item.items));
+            // result.populate('items').execPopulate(() => {
+            //     res.send(result);
+            // });
+           // function transaction(cId,pId){
+               var transaction = async(cId,pId)=>{
+                     await Payment.findOne({customerId:cId,paymentId:pId},{}).then(async(data)=>{
+                        if(data){
+                            var transactionid   = await crypto.randomBytes(6).toString('hex');
+                            //console.log(transactionid)
+                            transId=transactionid
+                            return transactionid
+                        }
+                        else{
+                            res.json("add Payment");
+                        }
+                        //status='Ordered'
+                    })
+                    //console.log(transactionid);
+                    //return transactionid;
+        }
+            //let status='Ordered';
+            //let indexFound = cart.items.map(item=>it;
+            //Order.items.push({i:cart});
+            let transactionId=transaction(customerId,paymentId);
+            console.log(transId);
+            const orderdata={
+            customerId:customerId,
+            items:cart.items,
+            //status:status,
+            totalCost:cart.subTotal,
+            address:addressId,
+            transactionId:transactionId
+            }
+            const order=new Order(orderdata);
+             order.save().then(()=>{
+                res.end('Order Successfully!');
+            })
+        }
+        else{
+            res.json("Add to cart");
+        }
     })
-    .then(result => {
-      console.log(result);
-      res.status(201).json({
-        message: "Order stored",
-        createdOrder: {
-          customerId: result.customerId,
-          items: result.items,
-          totalCost: result.totalCost
-        },
-       
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });
+}catch(err){
+    res.json(err);
 }
-
-
-
-
-
-
-//    try{
-//   var customerId=req.query.customerId;
-//   //var cartId=req.query.cartId;
-// const cart = await Cart.find({ customerId:customerId});
-//   //console.log(cart)
-  
-//   await Cart.deleteOne({ customerId: customerId },{cartId:cartId})
-//   .then(()=>{
-//       if(cart){
-       
-          
-//           let status='Ordered';
-//          const orderdata={
-//           customerId:customerId,
-//           cartId:cartId,
-//           items:cart.items,
-//           status:status,
-//           totalCost:cart.subTotal
-//          }
-//           const order=new Order(orderdata);
-//            order.save().then(()=>{
-//               res.end('Order Successfully!');
-//           })
-//       }
-//       else{
-//           res.json("Add to cart");
-//       }
-//   })
-// }catch(err){
-//   res.json(err);
-// }
-//  }
+}
+ 
    
  
 module.exports={
