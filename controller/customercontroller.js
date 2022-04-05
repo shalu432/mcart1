@@ -114,9 +114,13 @@ const addr= await Address.findOne({
     const salt = await bcrypt.genSalt(10)
     otp.otp = await bcrypt.hash(otp.otp, salt);
     const result = await otp.save()
-    //console.log(otp)
+    console.log(otp)
     .then(()=>
-    { return res.status(200).send("Otp send successfully!");
+    
+    { return res.status(200).send({
+message:otp,
+response:"otp send successfully"
+    });
         
     })
     .catch(err=>

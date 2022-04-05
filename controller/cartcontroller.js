@@ -5,7 +5,22 @@ const Cart = require('../model/cartschema')
 const Product = require('../model/productschema')
 //const res = require('express/lib/response')
 
-
+const getCart= async(req,res) => {
+    try{
+           const cus = await Cart.find()
+           res.json({
+               status:true,
+          response:cus
+           })
+    }catch(err){
+        res.send({
+            error:{
+                message:error,
+                response: "cart is empty"
+            }
+        })
+    }
+}
 
 const addProductToCart = async (req, res) => {
 
@@ -103,5 +118,6 @@ try{
 
 module.exports = {
     addProductToCart,
-    deleteCart
+    deleteCart,
+    getCart
 }

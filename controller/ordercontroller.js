@@ -20,12 +20,12 @@ const getOrderDetails = async(req,res) => {
   //var paymentId=req.query.paymentId;
   //const addressId=req.query.addressId
   const cart = await Cart.find({ customerId:customerId},{cartId:cartId});
-
+  console.log(cart)
   
-  await Cart.deleteOne({ customerId: customerId })
+  await Cart.deleteOne({ customerId: customerId },{cartId:cartId})
   .then(()=>{
       if(cart){
-        console.log(cart)
+       
           // console.log(cart.map(item=>item.items));
           // result.populate('items').execPopulate(() => {
           //     res.send(result);
