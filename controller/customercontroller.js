@@ -107,18 +107,20 @@ const addr= await Address.findOne({
   var OTP = otpGenerator.generate(6, {
         digits: true, alphabets: false, upperCase: false, specialChars: false
     });
-    console.log(OTP);
+    res.json({
+response:"otp sent successfully",
+        otp:OTP});
     const phoneNumber = req.body.phoneNumber;
    
     const otp = new Otp({ phoneNumber: phoneNumber, otp: OTP });
     const salt = await bcrypt.genSalt(10)
     otp.otp = await bcrypt.hash(otp.otp, salt);
     const result = await otp.save()
-    console.log(otp)
+    //console.log(otp)
     .then(()=>
     
-    { return res.status(200).send(otp);
-    //response:"otp send successfully"
+    { return res.status(200).send("otp send successfully");
+
     })
     .catch(err=>
         {
