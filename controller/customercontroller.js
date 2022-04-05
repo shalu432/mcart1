@@ -314,8 +314,9 @@ const deleteCustomer = async(req,res)=> {
     try{
         const cus = await Customer.findByIdAndDelete(req.params.id) 
         res.json({
-            message:"successfully deleted"
-       //  response:cus
+            status : 200,
+            message:"successfully deleted",
+         response:cus
     })  
     }catch(err){
         res.send('Error')
