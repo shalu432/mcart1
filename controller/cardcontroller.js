@@ -80,7 +80,7 @@ const deleteCard = async(req,res)=>
 
 const getPayment= async(req,res) => {
     try{
-           const cus = await Payment.find(req.params.id)
+           const cus = await Payment.find()
            res.json({
                status:"true",
                response:cus

@@ -1,58 +1,40 @@
 const mongoose = require('mongoose')
+const Customer = require('../model/customerschema')
+const Cart = require('../model/cartschema')
 const OrderSchema = new mongoose.Schema({
     
-        customerName:{
-          type: String,
-          required: true,
+  customerId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Customer"
+  },
+        items: {
+          type:Array,
+          require:true
         },
-        orderId: {
-          type: Number,
-          required: true,
-        },
-        product: [
-          {
-            productId: {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "Product",
-            },
-            quantity: {
-              type: Number,
-              default: 0,
-            },
-            discountedCost:{
-              type:Number,
-              required:true
-          },
-           
-           
-          },
-        ],
+        
         totalCost:
         {
           type : Number
         },
       
-      address: {
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Address",
-      },
-      paymentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"Payment",
-      },
-      customerId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Cart"
-      },
+      // address: {
+      //   type:mongoose.Schema.Types.ObjectId,
+      //   ref:"Address",
+      // },
+      // paymentId: {
+      //   type: mongoose.Schema.Types.ObjectId,
+      //   ref:"Payment",
+      // },
+     
 
     
       // Delivered: {
       //   type: Boolean,
       //   default: false,
       // },
-      orderStatus:{
+      status:{
         type : String,
-        enum:["pending","shipped","delivered"]
+        enum:["pending","shipped","delivered","cancled"]
       },
      
 

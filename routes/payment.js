@@ -9,5 +9,5 @@ const pay = require('../controller/cardcontroller')
 router.post('/addPayment',middCustomer.JWT,pay.addPayment)
 router.patch('/updatePayment/:key',middCustomer.JWT,pay.updatePayment)
 router.delete('/deletePayment/:id',middCustomer.JWT,pay.deleteCard)
-router.get('/getPayment/:id',middCustomer.JWT,pay.getPayment)
+router.get('/getPayment',middCustomer.JWT,pay.getPayment)
 module.exports = router
