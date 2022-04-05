@@ -72,10 +72,10 @@ const CustomerSchema = new mongoose.Schema({
      }],
   
 
- cardItems:[{
-type:mongoose.SchemaTypes.ObjectId,
-ref:'Cart'
- }]
+//  cardItems:[{
+// type:mongoose.SchemaTypes.ObjectId,
+// ref:'Cart'
+//  }]
 
 })
    
