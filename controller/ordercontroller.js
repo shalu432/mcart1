@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const Order = require('../model/orderschema')
-//const Vendor= require('../model/vendor')
+const Cart = require('../model/cartschema')
 
 const getOrderDetails = async(req,res) => {
     try{
-           const val = await Product.find()
+           const val = await Cart.find()
            res.json(val)
     }catch(err){
         res.send('Error ' + err)
@@ -13,40 +13,55 @@ const getOrderDetails = async(req,res) => {
  }
  const addOrder = async(req,res)=>
  {
-    const val = new Product({
-       
-        customerName : req.body.customerName,
-        productName: req.body.productName,
-        discount: req.body.discount,
-        discountedCost:(req.body.baseCost-(req.body.discount*req.body.baseCost/100)),
-        quantity: req.body.quantity,
-       size: req.body.size,
-        categoryName:req.body.categoryName,
+   Cart.findOne({_id:req.query.customerId},{_id:req.query.productId})
+   {
+     var quantity;
+  Cart.findOne(quantity>0)
+  .then(product => {
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found"
+      });
+    }
+    if(product)
+    {
+
     
-        brandName:req.body.brandName
+    const order = new Order({
+      _id: mongoose.Types.ObjectId(),
+      quantity: req.body.quantity,
+      product: req.body.productId
+    });
+   } return order.save();
+  
+  })
+
+
+  .then(result => {
+    console.log(result);
+    res.status(201).json({
+      message: "Order stored",
+      createdOrder: {
+        _id: result._id,
+        product: result.product,
+        quantity: result.quantity
+      },
+      
+    });
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({
+      error: err
+    });
+  });
+   }
+ }
+
         
 
 
-    })
-    val.save()
-        .then(result => {
-            
-            res.status(200).json({ 
-                
-                status:'true',
-                    Response:result
-                 })
-            
-        })
-        .catch(err => {
-            res.status(500).json({
-                error: err
-            })
-        })
-
    
-}
- 
  
 module.exports={
     getOrderDetails,

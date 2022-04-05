@@ -33,21 +33,28 @@ const OrderSchema = new mongoose.Schema({
         },
       
       address: {
-        type: String,
-        required: true,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Address",
       },
       paymentId: {
-        type: String,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Payment",
       },
-      createdAt: {
-        type: Date,
-        default: Date.now,
-      },
-      Delivered: {
-        type: Boolean,
-        default: false,
+      customerId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Cart"
       },
 
-})
+    
+      // Delivered: {
+      //   type: Boolean,
+      //   default: false,
+      // },
+      orderStatus:{
+        type : String,
+        enum:["pending","shipped","delivered"]
+      },
+     
+
+},{timestamps:true})
 module.exports = mongoose.model('Order',OrderSchema)

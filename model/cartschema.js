@@ -1,74 +1,69 @@
 const mongoose = require("mongoose");
-const cartSchema = new mongoose.Schema({
-  
-
-  
-  // customerId:
-  // {
-  //  type:mongoose.SchemaTypes.ObjectId,
-  //  ref:"Customer",
-  // },
-  //customer:{ type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
-//   cartItems: 
-//   [
-//     {
-//         productId:
-//          { type: mongoose.Schema.Types.ObjectId, 
-//           ref: 'Product', required: true
-//          },
-
-//         quantity: 
-//         { type: Number,
-//            default: 1 
-//           },
-
-
-//          price:{type:Number},
-//         // totalQty: {
-//         //   type: Number,
-//         //   default: 0,
-//         //   required: true,
-//         // },
-        
-   
-//       }],
-
-
-
-
-// totalCost: {
-//   type: Number,
-//   default: 0,
-//   required: true,
-// }
-   
-     
-    
-// },{timestamps:true});
-
-  
-    CustomerId: {
+const Product = require('../model/productschema')
+const Customer = require("../model/customerschema")
+const Schema = mongoose.Schema;
+let ItemSchema = new Schema(
+  {
+    productId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "Product",
     },
-    products: [
-      {
-        productId: Number,
-        quantity: Number,
-        productName: String,
-        price: Number
-      }
-    ],
-    active: {
-      type: Boolean,
-      default: true
+    productName:{
+    type:String
     },
-    modifiedOn: {
-      type: Date,
-      default: Date.now
-    }
+    quantity: {
+      type: Number,
+      required: true,
+      min: [1, "Quantity can not be less then 1."],
+    },
+    shortDescription:{
+      type:String
+    },
+    longDescription:{
+      type:String
+    },
+    available:{
+      type:Boolean
+    },
+    baseCost: {
+      type: Number,
+     // required: true,
+    },
+    categoryName:{
+      type:String
+    },
+    brandName:{
+      type:String
+    },
+    size:{
+      type:String,
+      uppercase:true,
+      enum:['S','M','L','XL','XXL']
   },
-  { timestamps: true }
-)
+    total: {
+     type: Number,
+      required: true,
+   },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.model("Cart", cartSchema);
+const CartSchema = new Schema(
+  {
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Customer",
+    },
+    items: [ItemSchema],
+    subTotal: {
+      type: Number,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = mongoose.model("Cart", CartSchema);

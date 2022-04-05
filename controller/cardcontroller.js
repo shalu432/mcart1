@@ -7,6 +7,9 @@ const router = express.Router()
 var key = require("crypto")
 
 const addPayment = async(req,res)=>{
+
+
+
     if(req.body.cardnumber && req.body.cardname && req.body.cardholdername && req.body.cvv && req.body.expdate && (req.body.cardnumber.toString().length)>=16 && (req.body.cardnumber.toString().length)<=16 && req.body.cvv.toString().length>=3 && req.body.cvv.toString().length <=3)
    {
  //  var firstName= req.body.firstName;
@@ -44,27 +47,22 @@ const addPayment = async(req,res)=>{
 else{
     res.json('Enter correct data');
 }}
-    
+
+
 
 const updatePayment=async (req,res) => {
     
-   // var {cardnumber,cardname,cardholdername,cvv,expdate} = res.body;
-// await Customer.findOne({_id:req.query.id})
- //{
- 
    var cardnumber = req.body.cardnumber;
-
- //  var cardname = req.body.cardname;
-   var cardholdername = req.body.cardholdername;
+ var cardholdername = req.body.cardholdername;
    var cvv = req.body.cvv;
    var expdate = req.body.expdate
     const key = req.params.key
     var value = await Payment.updateOne({paymentId:key},{$set:{cardnumber,cardholdername,cvv,expdate}});
     res.send(value) 
-    console.log(value)
+   // console.log(value)
    
 }
-//}
+
 const deleteCard = async(req,res)=>
 {
     try {
@@ -80,10 +78,22 @@ const deleteCard = async(req,res)=>
     }
 }
 
+const getPayment= async(req,res) => {
+    try{
+           const cus = await Payment.find(req.params.id)
+           res.json({
+               status:"true",
+               response:cus
+           })
+    }catch(err){
+        res.send('Error ' + err)
+    }
+}
 
 module.exports={
     addPayment,
     updatePayment,
-    deleteCard
+    deleteCard,
+    getPayment
 }
 

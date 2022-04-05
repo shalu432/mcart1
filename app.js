@@ -32,6 +32,9 @@ app.use('/',CategoryRouter)
   const cartRouter = require('./routes/cart')
    app.use('/',cartRouter)
 
+   const orderRouter = require('./routes/order')
+   app.use('/',orderRouter)
+
 // app.get('/',function(req,res)
 // {
 //   res.send("working")

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Category = require('../model/Categoryschema')
 const ProductSchema = new mongoose.Schema({
 
-    products:[{
+
     productName:{
         type:String,
         required:true
@@ -61,7 +61,6 @@ const ProductSchema = new mongoose.Schema({
          
          
         },
-    }],
    // },
     available: {
         type: Boolean,
