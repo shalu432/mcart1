@@ -117,11 +117,8 @@ const addr= await Address.findOne({
     console.log(otp)
     .then(()=>
     
-    { return res.status(200).send({
-message:otp,
-response:"otp send successfully"
-    });
-        
+    { return res.status(200).send(otp);
+    //response:"otp send successfully"
     })
     .catch(err=>
         {
