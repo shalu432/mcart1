@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken');
 //const { updateOne } = require('../model/customerschema')
 const Address = require('../model/addressschema')
 
-const getCustomerbyMerchant= async(req,res) => {
+const getCustomer= async(req,res) => {
     try{
            const cus = await Customer.find()
            res.json({
@@ -326,7 +326,7 @@ const deleteCustomer = async(req,res)=> {
 }
 
 module.exports={
-    getCustomerbyMerchant,
+    getCustomer,
     addCustomer,
     updateCustomer,
     deleteCustomer,
