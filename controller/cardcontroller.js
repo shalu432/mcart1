@@ -42,7 +42,11 @@ await Customer.findOne({_id:req.query.id})
     }
     // console.log("fkjshfkfsfkjhsjf",data)
     var val=new Payment(data);
-    await val.save().then(()=>res.send("Successfully")).catch((err)=>res.send(err))
+    await val.save().then(()=>res.send({
+        status:true,
+        response:"successfully",
+        error:{}
+    })).catch((err)=>res.send(err))
     
  }else{res.send('email  Not Found')}
 }
