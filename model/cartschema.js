@@ -56,6 +56,10 @@ const CartSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customer",
     },
+    // addressId:{
+    //   type:mongoose.Schema.Types.ObjectId,
+    //   ref:"Address"
+    // },
     items: [ItemSchema],
     subTotal: {
       type: Number,

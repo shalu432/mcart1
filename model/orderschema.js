@@ -22,8 +22,8 @@ const OrderSchema = new mongoose.Schema({
         },
       
       address: {
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Address",
+        type:mongoose.SchemaTypes.ObjectId,
+        ref:"Addresses",
       },
       paymentId: {
         type: mongoose.Schema.Types.ObjectId,

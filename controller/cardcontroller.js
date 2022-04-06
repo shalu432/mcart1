@@ -9,38 +9,37 @@ var key = require("crypto")
 const addPayment = async(req,res)=>{
     try{
         var customerId = req.query.customerId
-await Customer.findOne({_id:req.query.id})
+await Payment.findOne({customerId: customerId})
 {
 
     if(req.body.cardnumber && req.body.cardname && req.body.cardholdername && req.body.cvv && req.body.expdate && (req.body.cardnumber.toString().length)>=16 && (req.body.cardnumber.toString().length)<=16 && req.body.cvv.toString().length>=3 && req.body.cvv.toString().length <=3)
    {
- //  var firstName= req.body.firstName;
-    //var lastName=req.body.lastName
+ 
     var email= req.body.email
     var cardnumber = req.body.cardnumber;
-   // var cardname = req.body.cardname;
+    var cardname = req.body.cardname;
     var cardholdername = req.body.cardholdername;
     var cvv = req.body.cvv;
     var expdate = req.body.expdate
-     // console.log(req.body)
+    var customerId=req.query.customerId
+    
     var paymentId = key.randomBytes(6).toString('hex')
-    //console.log(rollnumber)
+   
      var token =await Customer.find({email:email})
      if(token.length!=0){
      
         var data = {
-    //  'firstName' : firstName,
-    //  'lastName' : lastName,
+    
     'customerId':customerId,
      'email' : email,
      'cardnumber': cardnumber,
-     // 'cardname' : cardname,
+      'cardname' : cardname,
      'cardholdername': cardholdername,
       'cvv' : cvv,
      'expdate' : expdate,
      'paymentId':paymentId
     }
-    // console.log("fkjshfkfsfkjhsjf",data)
+    
     var val=new Payment(data);
     await val.save().then(()=>res.send({
         status:true,

@@ -3,6 +3,8 @@ const router = express.Router()
 const Customer = require('../model/customerschema')
 const Cart = require('../model/cartschema')
 const Product = require('../model/productschema')
+const { add } = require('lodash')
+const Address = require('../model/addressschema')
 //const res = require('express/lib/response')
 
 const getAllCart= async(req,res) => {
@@ -42,7 +44,7 @@ const addProductToCart = async (req, res) => {
 
 try{
     const customerId= req.body.customerId;
-    const productId=req.body.productId;
+     const productId=req.body.productId;
     let data = null;
     const quantity = Number.parseInt(req.body.quantity);
     let cart = await Cart.findOne({ customerId: customerId});
@@ -90,6 +92,7 @@ try{
     else {
         const cartData = {
             customerId: customerId,
+            
             items: [{
                 productId: productId,
                 productName:productDetails.productName,

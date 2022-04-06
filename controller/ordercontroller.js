@@ -23,70 +23,92 @@ const getOrderDetails = async(req,res) => {
  const addOrder = async(req,res)=>
  {
   try{
-    var customerId=req.query.customerId;
-    var paymentId=req.body.paymentId;
-    const addressId=req.query.addressId;
-    //await customerProfile.findOne({_id:ObjectId(customerId)}).then(data=>{})
-    const cart = await Cart.findOne({ customerId: customerId});
-    //console.log(cart);
-    //await customerProfile.findOne({_id:ObjectId(customerId)}).populate("address").then({
-    await Cart.deleteOne({ customerId: customerId })
+  var customerId=req.query.customerId;
+  const addressId= req.query.addressId;
+  const cart = await Cart.findOne({ customerId: customerId,addressId:addressId})
+     await Cart.deleteOne({ customerId: customerId })
     .then(()=>{
-        if(cart){
-            let transId;
-            // console.log(cart.map(item=>item.items));
-            // result.populate('items').execPopulate(() => {
-            //     res.send(result);
-            // });
-           //function transaction(cId,pId){
-               var transaction = async(cId,pId)=>{
-                     await Payment.findOne({customerId:cId,paymentId:pId},{}).then(async(data)=>{
-                        if(data){
-                            var transactionid   = await crypto.randomBytes(6).toString('hex');
-                            //console.log(transactionid)
-                            transId=transactionid
-                            return transactionid
-                        }
-                        else{
-                            res.json("add Payment");
-                        }
-                        //status='Ordered'
-                    })
-                    //console.log(transactionid);
-                    //return transactionid;
-        }
-            //let status='Ordered';
-            //let indexFound = cart.items.map(item=>it;
-            //Order.items.push({i:cart});
-            let transactionId=transaction(customerId,paymentId);
-            console.log(transId);
+       
+           if(cart){
             const orderdata={
             customerId:customerId,
+            addressId:addressId,
             items:cart.items,
+
+
             //status:status,
             totalCost:cart.subTotal,
-            address:addressId,
-            transactionId:transactionId
+         
             }
             const order=new Order(orderdata);
              order.save().then(()=>{
                 res.end('Order Successfully!');
             })
-        }
+       }
         else{
-            res.json("Add to cart");
+             res.json("order not placed");
         }
     })
 }catch(err){
     res.json(err);
 }
 }
+const orderPayment = async(req,res)=>
+{
+  var customerId =req.query.customerId;
+  var paymentId =req.query.paymentId;
+  const cart = await Cart.findOne({ customerId: customerId}).then(()=>{
+  if(cart)
+  {
+    let transId;
+         var transaction = async(pId)=>{
+                 await Payment.findOne({customerId:customerId,paymentId:pId},{}).then(async(data)=>{
+                    if(data){
+                        var transactionid   = await crypto.randomBytes(6).toString('hex');
+                        console.log(transactionid)
+                        transId=transactionid
+                        return transactionid
+                    }
+                    else{
+                        res.json("add Payment");
+                    }
+                    //status='Ordered'
+                })
+                console.log(transactionid);
+                //return transactionid;
+    }
+        //let status='Ordered';
+       
+       let transactionId=transaction(customerId,paymentId);
+       console.log(transId);
+      const orderdata={
+        customerId:customerId,
+      //  items:cart.items,
+        //status:status,
+        totalCost:cart.subTotal,
+      //  address:addressId,
+      //  transactionId:transactionId
+        }
+        const order=new Order(orderdata);
+         order.save().then(()=>{
+            res.end('payment Successfully!');
+        })
+          }   else{
+            res.json(error)
+        }
+      })
+
+  
+ 
+
+}
  
    
  
 module.exports={
     getOrderDetails,
-    addOrder
+    addOrder,
+    orderPayment
     
     
 }
