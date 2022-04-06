@@ -8,5 +8,5 @@ const cart = require('../controller/cartcontroller')
 router.post('/cart',cart.addProductToCart)
 router.put('/deletecart',middCustomer.JWT,cart.deleteCart)
 router.get('/getcart',middCustomer.JWT,cart.getAllCart)
-router.get('/getcart',middCustomer.JWT,cart.getCart)
+router.get('/getcart/:id',middCustomer.JWT,cart.getCart)
 module.exports = router
