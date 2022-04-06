@@ -75,7 +75,7 @@ const orderPayment = async(req,res)=>
                     //status='Ordered'
                 })
                 console.log(transactionid);
-                //return transactionid;
+                return transactionid;
     }
         //let status='Ordered';
        
