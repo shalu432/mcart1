@@ -21,6 +21,22 @@ const getAllCart= async(req,res) => {
         })
     }
 }
+const getCart= async(req,res) => {
+    try{
+           const cus = await Cart.findById(req.params.id)
+           res.json({
+               status:true,
+          response:cus
+           })
+    }catch(err){
+        res.send({
+            error:{
+                message:error,
+                response: "cart is empty"
+            }
+        })
+    }
+}
 
 const addProductToCart = async (req, res) => {
 
@@ -120,5 +136,6 @@ try{
 module.exports = {
     addProductToCart,
     deleteCart,
-    getAllCart
+    getAllCart,
+    getCart
 }
