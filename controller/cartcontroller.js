@@ -106,7 +106,7 @@ try{
     var cus =  await Cart.findOneAndUpdate({customerId :(req.query.customerId)}, { $pull: { items : {productId:(req.query.productId) }}}, {multi: true}).then(data=>{
         res.json({
          message  :"deleted successfully",
-            error:{},
+            error:"null",
             response:cus
         })
       })
