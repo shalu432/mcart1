@@ -30,7 +30,7 @@ const getOrderDetails = async(req,res) => {
             // result.populate('items').execPopulate(() => {
             //     res.send(result);
             // });
-           // function transaction(cId,pId){
+           //function transaction(cId,pId){
                var transaction = async(cId,pId)=>{
                      await Payment.findOne({customerId:cId,paymentId:pId},{}).then(async(data)=>{
                         if(data){
