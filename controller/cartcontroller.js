@@ -5,9 +5,9 @@ const Cart = require('../model/cartschema')
 const Product = require('../model/productschema')
 //const res = require('express/lib/response')
 
-const getCart= async(req,res) => {
+const getAllCart= async(req,res) => {
     try{
-           const cus = await Cart.find()
+           const cus = await Cart.findOne()
            res.json({
                status:true,
           response:cus
@@ -120,5 +120,5 @@ try{
 module.exports = {
     addProductToCart,
     deleteCart,
-    getCart
+    getAllCart
 }
