@@ -12,7 +12,12 @@ const getOrderDetails = async(req,res) => {
              response:val
            })
     }catch(err){
-        res.send('Error ' + err)
+        res.send({
+          error:{
+            message:"error",
+            response: null
+          }
+        })
     }
  }
  const addOrder = async(req,res)=>
