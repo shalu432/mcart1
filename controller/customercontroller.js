@@ -126,7 +126,7 @@ response:"otp sent successfully",
     const salt = await bcrypt.genSalt(10)
     otp.otp = await bcrypt.hash(otp.otp, salt);
     const result = await otp.save()
-    console.log(otp)
+    //console.log(otp)
     .then(()=>
     
     { return res.status(200).send("otp send successfully");
