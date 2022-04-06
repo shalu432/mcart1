@@ -7,7 +7,10 @@ const Payment=require('../model/paymentschema')
 const getOrderDetails = async(req,res) => {
     try{
            const val = await Cart.find()
-           res.json(val)
+           res.json({
+             status:true,
+             response:val
+           })
     }catch(err){
         res.send('Error ' + err)
     }
