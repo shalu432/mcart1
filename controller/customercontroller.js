@@ -252,11 +252,11 @@ try{
         //         response:a1
         // })   
    
-  .then((data)=>{
+  .then(()=>{
 
       res.json({
           message : "successfully Updated",
-          response:data
+          response:a1
       })
   }).catch((err)=>{
      console.log(err) 
