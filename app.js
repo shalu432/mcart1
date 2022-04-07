@@ -35,10 +35,10 @@ app.use('/',CategoryRouter)
    const orderRouter = require('./routes/order')
    app.use('/',orderRouter)
 
-// app.get('/',function(req,res)
-// {
-//   res.send("working")
-// })
+app.get('/',function(req,res)
+{
+  res.send("working")
+})
 
 
 const port = process.env.PORT ||7500

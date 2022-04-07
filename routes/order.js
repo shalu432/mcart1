@@ -8,6 +8,7 @@ const cust= require('../controller/ordercontroller')
 router.post('/addorder',cust.addOrder)
 router.post('/orderPayment',cust. orderPayment)
 router.get('/getorder',cust.getOrderDetails)
+router.delete('/deleteorder',cust.cancelOrder)
 
 
 module.exports = router;

@@ -98,7 +98,7 @@ const addr= await Address.findOne({
     })
 })
 .catch(err => {
-    res.status(500).json({
+    res.status(404).json({
         error: err
     })
 })
