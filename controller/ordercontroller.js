@@ -87,7 +87,7 @@ const orderPayment = async(req,res)=>
       const orderdata={
         customerId:customerId,
         items:pay.items,
-        //status:status,
+        status:status,
         totalCost:cart.subTotal,
       //  address:addressId,
         transactionId:transId
