@@ -10,5 +10,6 @@ router.post('/orderPayment',cust. orderPayment)
 router.get('/getorder',cust.getAllOrder)
 router.delete('/deleteorder',cust.cancelOrder)
 router.get('/getorder',cust.getOrder)
+router.patch('/orderstatus',cust.orderStatus)
 
 module.exports = router;

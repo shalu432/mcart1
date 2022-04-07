@@ -37,7 +37,7 @@ const getCustomer= async(req,res) => {
 const addCustomer = async(req,res) => {
   
   
-  
+  try{
     const use= new Customer({
         firstName: req.body.firstName,
                 lastName: req.body.lastName,
@@ -106,7 +106,11 @@ const addr= await Address.findOne({
         error: err
     })
 })
-   
+}
+catch(error)
+{
+    res.json(err)
+}
 }
 
 

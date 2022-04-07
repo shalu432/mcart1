@@ -78,13 +78,13 @@ const orderPayment = async(req,res)=>
   var paymentId =req.query.paymentId;
   var cart = await Order.findOne({customerId:customerId})
   {
-  const pay = await Payment.findOne({ customerId: customerId,paymentId:paymentId}).then(()=>{
+   await Payment.findOne({ customerId: customerId,paymentId:paymentId}).then((pay)=>{
   if(pay)
   {
-    let transId;
+    //let transId;
   var transactionid = crypto.randomBytes(6).toString('hex');
-   transId=transactionid
-                       let status='Ordered';
+   pay.transactionid=transactionid
+    let status='Ordered';
        
      
       const orderdata={
@@ -94,7 +94,7 @@ const orderPayment = async(req,res)=>
         status:status,
         totalCost:cart.subTotal,
       //  address:addressId,
-        transactionId:transId
+        transactionId:transactionid
         }
         const order=new Order(orderdata);
          order.save().then(()=>{
@@ -113,10 +113,10 @@ res.send("error")
  const cancelOrder = async(req,res)=>
  {
 try {
-  const ord = await Order.findByIdAndDelete(req.params.id)
+  const ord = await Order.findByIdAndDelete(req.params.orderId)
   res.json({
     status:true,
-    message:"deleted successfully",
+    message:"order deleted",
     response:ord
   })
 } catch (err) {
@@ -124,6 +124,28 @@ try {
     error: error
   })
 }
+}
+const orderStatus = async(req,res) => {
+  try{
+         const ord = await Order.findByIdAndUpdate(req.query.orderId).then((data)=>
+         {
+          data.status = req.body.status
+          data.save().then((result)=>{
+            res.json(result)
+           })
+        })
+         
+         
+        
+      //  res.json(ord)
+  }catch(err){
+      res.send({
+        error:{
+          message:"order not placed ",
+          
+        }
+      })
+  }
 }
  
 
@@ -136,7 +158,8 @@ module.exports={
     addOrder,
     orderPayment,
     cancelOrder,
-    getOrder
+    getOrder,
+    orderStatus
     
     
 }
