@@ -243,20 +243,20 @@ try{
                 //address: req.body.address,
                  
         }
-     }) 
+     },{new:true})
      
-      const a1 = await cus.save()
+     // const a1 = await cus.save()
         
         //     res.status(200).json({
         //         message : "successfully Updated",
         //         response:a1
         // })   
    
-  .then(()=>{
+  .then((data)=>{
 
       res.json({
           message : "successfully Updated",
-          response:a1
+          response:data
       })
   }).catch((err)=>{
      console.log(err) 
