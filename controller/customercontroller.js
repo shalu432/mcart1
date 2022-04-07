@@ -259,10 +259,11 @@ try{
           response:data
       })
   }).catch((err)=>{
-     console.log(err) 
+    // console.log(err) 
      res.send({
          error_code:403,
-         message:"null"
+         message:"null",
+         response:err
 
      })
   })
