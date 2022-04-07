@@ -98,7 +98,7 @@ const addr= await Address.findOne({
     })
 })
 .catch(err => {
-    res.status(404).json({
+    res.status(403).json({
         error: err
     })
 })
@@ -191,7 +191,7 @@ const verifyOtp= (req,res)=>
                     {
                         "status": true,
                         "response": null,
-                        "code": 200,
+                        "code":404,
                         "error": {
                         "errCode": "FAILED",
                         "errMsg": "Failed to login"
@@ -235,7 +235,11 @@ const verifyOtp= (req,res)=>
       })
   }).catch((err)=>{
      console.log(err) 
-     res.send(err)
+     res.send({
+         error_code:403,
+         message:"null"
+
+     })
   })
 
 }
@@ -319,7 +323,10 @@ const deleteCustomer = async(req,res)=> {
          response:cus
     })  
     }catch(err){
-        res.send('Error')
+        res.status(404).send({
+            error_code:404,
+
+        })
     }
    
 

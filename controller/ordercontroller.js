@@ -109,11 +109,11 @@ res.send("error")
  const cancelOrder = async(req,res)=>
  {
 try {
-  const val = await Order.findByIdAndDelete(req.params.id)
+  const ord = await Order.findByIdAndDelete(req.params.id)
   res.json({
     status:true,
     message:"deleted successfully",
-    response:val
+    response:ord
   })
 } catch (err) {
   res.send({
