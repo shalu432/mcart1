@@ -4,13 +4,14 @@ const Order = require('../model/orderschema')
 const Cart = require('../model/cartschema')
 const Customer = require('../model/customerschema')
 const Payment=require('../model/paymentschema')
-const getOrderDetails = async(req,res) => {
+const getAllOrder = async(req,res) => {
     try{
-           const val = await Order.findById(req.params.id)
+           const ord = await Order.find()
            res.json({
-             status:true,
-             response:val
+            status:true,
+             response:ord
            })
+        //  res.json(ord)
     }catch(err){
         res.send({
           error:{
@@ -20,6 +21,23 @@ const getOrderDetails = async(req,res) => {
         })
     }
  }
+ const getOrder = async(req,res) => {
+  try{
+         const ord = await Order.findOne(req.query.id)
+         res.json({
+           status:true,
+           response:ord
+         })
+      //  res.json(ord)
+  }catch(err){
+      res.send({
+        error:{
+          message:"error",
+          response: null
+        }
+      })
+  }
+}
  const addOrder = async(req,res)=>
  {
   try{
@@ -114,10 +132,11 @@ try {
    
  
 module.exports={
-    getOrderDetails,
+    getAllOrder,
     addOrder,
     orderPayment,
-    cancelOrder
+    cancelOrder,
+    getOrder
     
     
 }

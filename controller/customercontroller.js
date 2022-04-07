@@ -35,6 +35,9 @@ const getCustomer= async(req,res) => {
 
 
 const addCustomer = async(req,res) => {
+  
+  
+  
     const use= new Customer({
         firstName: req.body.firstName,
                 lastName: req.body.lastName,

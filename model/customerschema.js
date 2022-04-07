@@ -35,7 +35,6 @@ const CustomerSchema = new mongoose.Schema({
 
         type: Number,
         unique: true,
-       
         validate(value) {
             if (value.toString().length != 10 || value < 0) {
                 throw new Error("Enter a valid  phone number")
