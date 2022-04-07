@@ -110,10 +110,11 @@ const addr= await Address.findOne({
 
 
  const loginUser = async (req, res) => {
-  
-    const user = await Otp.findOne({
-        phoneNumber: req.body.phoneNumber
-    });
+  try{
+    await Customer.findOne({phoneNumber:req.body.phoneNumber}).then(async(data)=>
+    {
+if(data)
+{
   var OTP = otpGenerator.generate(6, {
         digits: true, alphabets: false, upperCase: false, specialChars: false
     });
@@ -136,8 +137,14 @@ response:"otp sent successfully",
         {
             return err
         })
- 
 }
+  })}
+
+    catch(error)
+    {
+        res.json("error")
+    }
+ }
 
 const verifyOtp= (req,res)=>
 {

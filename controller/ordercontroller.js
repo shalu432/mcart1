@@ -58,35 +58,21 @@ const orderPayment = async(req,res)=>
   try{
   var customerId =req.query.customerId;
   var paymentId =req.query.paymentId;
+  var cart = await Order.findOne({customerId:customerId})
+  {
   const pay = await Payment.findOne({ customerId: customerId,paymentId:paymentId}).then(()=>{
   if(pay)
   {
     let transId;
-        // var transaction = async(req,res)=>{
-            //    var trans= await Payment.findOne({customerId:customerId,paymentId:paymentId},{}).then(()=>{
-                   // if(trans){
-                        var transactionid   = crypto.randomBytes(6).toString('hex');
-                       // console.log(transactionid)
-                        transId=transactionid
-                        //return transactionid
-                    
-                    // else{
-                    //     res.json("add Payment");
-                    // }
-                //    return transactionid;
-                    
-                    //status='Ordered'
-                
-                
-               
-    
-        //let status='Ordered';
+  var transactionid = crypto.randomBytes(6).toString('hex');
+   transId=transactionid
+                       let status='Ordered';
        
-     //  let transactionId=transaction(customerId,paymentId);
-     //  console.log(transId);
+     
       const orderdata={
         customerId:customerId,
-        items:pay.items,
+        paymentId:paymentId,
+        items:cart.items,
         status:status,
         totalCost:cart.subTotal,
       //  address:addressId,
@@ -101,7 +87,7 @@ const orderPayment = async(req,res)=>
             res.json(error)
         }
       })
-  
+    } 
 }catch(error){
 res.send("error")
 }
