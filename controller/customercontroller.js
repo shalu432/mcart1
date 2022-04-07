@@ -219,7 +219,7 @@ const verifyOtp= (req,res)=>
 
         }catch(error)
         {
-            res.json(err)
+            res.json(error)
         }
        
         }
