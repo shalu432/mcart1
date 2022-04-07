@@ -21,8 +21,8 @@ app.use('/',PaymentRouter)
 const ProductRouter = require('./routes/product')
 app.use('/',ProductRouter)
 
-//const AdminRouter = require('./routes/admin1')
-//app.use('/admin',AdminRouter)
+const AdminRouter = require('./routes/admin.js')
+app.use('/',AdminRouter)
 
 const MerchantRouter = require('./routes/merchant')
 app.use('/merchant',MerchantRouter)

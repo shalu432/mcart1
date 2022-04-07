@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Product = require('../model/productschema')
-
+const Merchant = require('../model/merchantschema')
 //product
 const getAllProduct = async (req, res) => {
     try {
@@ -81,7 +81,9 @@ const productRecord = (req, res, next) => {
 
 
 const addProductbyMerchant = async (req, res) => {
-
+var merchantId=req.query.merchantId
+await Merchant.findOne({merchantId:merchantId})
+{
     var quantity = req.body.quantity;
     var available=avail(quantity);
     function avail(q){
@@ -93,6 +95,7 @@ const addProductbyMerchant = async (req, res) => {
         }
     }
     const val = new Product({
+        merchantId:merchantId,
         productName: req.body.productName,
         baseCost: req.body.baseCost,
         shortDescription: req.body.shortDescription,
@@ -127,7 +130,7 @@ const addProductbyMerchant = async (req, res) => {
             })
         })
 
-   
+    }
 }
 
 const updateProductbyMerchant = async (req, res) => {

@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken')
 const getAdmin = (req,res)=>
 {
     res.status(200).json({
-        message :"user route working"
+        message :""
     })
 }
 const addAdmin = async(req,res)=>
@@ -25,7 +25,7 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
         else
         {
             const data = new Admin({
-               // name :req.body.name,
+               name :req.body.name,
                 email:req.body.email,
                 password :hash
                 })

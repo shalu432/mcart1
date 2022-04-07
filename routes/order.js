@@ -6,6 +6,8 @@ const Orderr = require('../model/orderschema')
 
 const cust= require('../controller/ordercontroller')
 router.post('/addorder',cust.addOrder)
+router.post('/orderPayment',cust. orderPayment)
+router.get('/getorder',cust.getOrderDetails)
 
 
 module.exports = router;

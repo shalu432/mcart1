@@ -6,7 +6,7 @@ const Customer = require('../model/customerschema')
 const Payment=require('../model/paymentschema')
 const getOrderDetails = async(req,res) => {
     try{
-           const val = await Cart.find()
+           const val = await Order.findById(req.params.id)
            res.json({
              status:true,
              response:val
@@ -24,7 +24,7 @@ const getOrderDetails = async(req,res) => {
  {
   try{
   var customerId=req.query.customerId;
-  const addressId= req.query.addressId;
+  var addressId= req.query.addressId;
   const cart = await Cart.findOne({ customerId: customerId,addressId:addressId})
      await Cart.deleteOne({ customerId: customerId })
     .then(()=>{
@@ -55,60 +55,83 @@ const getOrderDetails = async(req,res) => {
 }
 const orderPayment = async(req,res)=>
 {
+  try{
   var customerId =req.query.customerId;
   var paymentId =req.query.paymentId;
-  const cart = await Cart.findOne({ customerId: customerId}).then(()=>{
-  if(cart)
+  const pay = await Payment.findOne({ customerId: customerId,paymentId:paymentId}).then(()=>{
+  if(pay)
   {
     let transId;
-         var transaction = async(pId)=>{
-                 await Payment.findOne({customerId:customerId,paymentId:pId},{}).then(async(data)=>{
-                    if(data){
-                        var transactionid   = await crypto.randomBytes(6).toString('hex');
-                        console.log(transactionid)
+        // var transaction = async(req,res)=>{
+            //    var trans= await Payment.findOne({customerId:customerId,paymentId:paymentId},{}).then(()=>{
+                   // if(trans){
+                        var transactionid   = crypto.randomBytes(6).toString('hex');
+                       // console.log(transactionid)
                         transId=transactionid
-                        return transactionid
-                    }
-                    else{
-                        res.json("add Payment");
-                    }
+                        //return transactionid
+                    
+                    // else{
+                    //     res.json("add Payment");
+                    // }
+                //    return transactionid;
+                    
                     //status='Ordered'
-                })
-                console.log(transactionid);
-                return transactionid;
-    }
+                
+                
+               
+    
         //let status='Ordered';
        
-       let transactionId=transaction(customerId,paymentId);
-       console.log(transId);
+     //  let transactionId=transaction(customerId,paymentId);
+     //  console.log(transId);
       const orderdata={
         customerId:customerId,
-      //  items:cart.items,
+        items:pay.items,
         //status:status,
         totalCost:cart.subTotal,
       //  address:addressId,
-      //  transactionId:transactionId
+        transactionId:transId
         }
         const order=new Order(orderdata);
          order.save().then(()=>{
             res.end('payment Successfully!');
         })
-          }   else{
+          }  
+           else{
             res.json(error)
         }
       })
-
   
+}catch(error){
+res.send("error")
+}
+} 
+ const cancelOrder = async(req,res)=>
+ {
+try {
+  const val = await Order.findByIdAndDelete(req.params.id)
+  res.json({
+    status:true,
+    message:"deleted successfully",
+    response:val
+  })
+} catch (err) {
+  res.send({
+    error: error
+  })
+}
+}
  
 
-}
+
  
    
  
 module.exports={
     getOrderDetails,
     addOrder,
-    orderPayment
+    orderPayment,
+    cancelOrder
     
     
 }

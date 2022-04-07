@@ -66,6 +66,10 @@ const ProductSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
      },
+     merchantId:{
+         type: mongoose.Schema.Types.ObjectId,
+         ref:"Merchant"
+     },
     created_at    : { type: Date, required: true, default: Date.now }
     
 })

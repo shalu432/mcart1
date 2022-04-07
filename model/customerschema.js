@@ -8,6 +8,7 @@ const CustomerSchema = new mongoose.Schema({
         type: String,
         minlength:2,
         maxlength:30,
+        match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
        required: true
     },
     lastName: {
