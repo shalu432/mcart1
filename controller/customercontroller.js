@@ -247,10 +247,10 @@ try{
      
       const a1 = await cus.save()
         
-            res.status(200).json({
-                message : "successfully Updated",
-                response:a1
-        })   
+        //     res.status(200).json({
+        //         message : "successfully Updated",
+        //         response:a1
+        // })   
    
   .then(()=>{
 
@@ -271,6 +271,11 @@ try{
     res.json(error)
 }
 }
+
+
+
+
+
 const updateAddress = async(req,res)=> {
 try{
 
