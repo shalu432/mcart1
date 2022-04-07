@@ -158,6 +158,7 @@ response:"otp sent successfully",
 
 const verifyOtp= (req,res)=>
 {
+    try{
     Customer.findOne({phoneNumber:req.body.phoneNumber}).then(result=>{
     Otp.find({ phoneNumber:req.body.phoneNumber})
     .exec()
@@ -215,13 +216,20 @@ const verifyOtp= (req,res)=>
                         },
                     })
             })
-}
+
+        }catch(error)
+        {
+            res.json(err)
+        }
+       
+        }
+
 
 
  
  const updateCustomer = async(req,res)=> {
 
-
+try{
         const cus = await Customer.findByIdAndUpdate({_id:req.params.id},{
        $set:{
         
@@ -258,9 +266,14 @@ const verifyOtp= (req,res)=>
 
      })
   })
-
+}catch(error)
+{
+    res.json(error)
+}
 }
 const updateAddress = async(req,res)=> {
+try{
+
 
 var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
   var flagaddress = await Address.findOne({_id:req.query.address},{})
@@ -328,6 +341,10 @@ var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
     message:"Unable_to_update_customer_address"
     })
   }
+}catch(error)
+{
+    res.json(err)
+}
 }
 
 
