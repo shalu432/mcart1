@@ -229,7 +229,7 @@ const verifyOtp= (req,res)=>
    
   .then(()=>{
 
-      res.status(200).json({
+      res.json({
           message : "successfully Updated",
           response:cus
       })
