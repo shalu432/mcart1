@@ -10,7 +10,8 @@ const jwt = require('jsonwebtoken');
 
 //const { findOne } = require('../model/customerschema');
 //const { updateOne } = require('../model/customerschema')
-const Address = require('../model/addressschema')
+const Address = require('../model/addressschema');
+const { status } = require('express/lib/response');
 
 const getCustomer= async(req,res) => {
     try{
@@ -135,14 +136,16 @@ response:"otp sent successfully",
     })
     .catch(err=>
         {
-            return err
+            res.status(404).json({
+                error:err
+            })
         })
 }
   })}
 
     catch(error)
     {
-        res.json("error")
+        res.status(404).json("error")
     }
  }
 
