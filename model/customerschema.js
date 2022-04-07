@@ -26,7 +26,7 @@ const CustomerSchema = new mongoose.Schema({
     DOB: {
         type: Date,
         min:Date[1960-01-01],
-        max:Date.now,
+        max:Date[2022-01-01],
         require: true
         
     },
