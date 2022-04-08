@@ -26,6 +26,7 @@ ref:"Customer"
     {
         type: String,
         uppercase:true,
+        match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
         require: true
     },
     cardname:
