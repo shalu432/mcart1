@@ -9,7 +9,7 @@ const Address = require('../model/addressschema')
 
 const getAllCart= async(req,res) => {
     try{
-           const cus = await Cart.findOne()
+           const cus = await Cart.find()
            res.json({
                status:true,
           response:cus
