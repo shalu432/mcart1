@@ -217,7 +217,7 @@ const verifyOtp= (req,res)=>
                     {
                         "status": true,
                         "response": null,
-                        "code":404,
+                        "code":500,
                         "error": {
                         "errCode": "FAILED",
                         "errMsg": "Failed to login"
@@ -269,7 +269,7 @@ try{
   }).catch((err)=>{
     // console.log(err) 
      res.send({
-         error_code:403,
+         error_code:500,
          message:"null",
          response:err
 
@@ -304,9 +304,9 @@ try{
 //     })
 //   }
   if(flagaddress==null){
-    res.status(201).json({status:"false",
+    res.status(500).json({status:"false",
     respone:"null",
-    code:"403",
+    code:"500",
     errors:{
         error_code:"failed_to_update",
         error_msg:"invalid_address_id"
@@ -335,14 +335,14 @@ try{
     },{new:true}).then((result) => res.status(201).json(
       {status:"true",
       respone:result,
-      code:"201",
+      code:"200",
       errors:{
       },
       message:"address_updated_succesfully"
     }))
     .catch((err) => res.status(201).json({status:"false",
     respone:"null",
-    code:"403",
+    code:"500",
     errors:{
         error_code:"failed_to_update",
         error_msg:err
@@ -351,9 +351,9 @@ try{
     }))
     //resp.send(result)
   }else{
-    res.status(201).json({status:"false",
+    res.status(500).json({status:"false",
     respone:"null",
-    code:"403",
+    code:"500",
     errors:{
         error_code:"Authorization_failed",
         error_msg:"something_went_wrong"
@@ -377,8 +377,8 @@ const deleteCustomer = async(req,res)=> {
          response:cus
     })  
     }catch(err){
-        res.status(404).send({
-            error_code:404,
+        res.status(500).send({
+            error_code:500,
 
         })
     }
