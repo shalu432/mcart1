@@ -284,29 +284,29 @@ try{
 var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
   var flagaddress = await Address.findOne({_id:req.query.address},{})
  // console.log(flagaddress,flagcustomer)
-  if(flagcustomer==null){
-    res.status(201).json({status:"false",
-    respone:"null",
-    code:"403",
-    errors:{
-        error_code:"failed_to_update",
-        error_msg:"invalid_customer_id"
-    },
-    message:"Unable_to_update_customer_address"
-    })
-  }
-  if(flagaddress==null){
-    res.status(201).json({status:"false",
-    respone:"null",
-    code:"403",
-    errors:{
-        error_code:"failed_to_update",
-        error_msg:"invalid_address_id"
-    },
-    message:"Unable_to_update_customer_address"
-    })
-  }
-   else if (flagcustomer!=null&&flagaddress!=null)
+//   if(flagcustomer==null){
+//     res.status(201).json({status:"false",
+//     respone:"null",
+//     code:"403",
+//     errors:{
+//         error_code:"failed_to_update",
+//         error_msg:"invalid_customer_id"
+//     },
+//     message:"Unable_to_update_customer_address"
+//     })
+//   }
+//   if(flagaddress==null){
+//     res.status(201).json({status:"false",
+//     respone:"null",
+//     code:"403",
+//     errors:{
+//         error_code:"failed_to_update",
+//         error_msg:"invalid_address_id"
+//     },
+//     message:"Unable_to_update_customer_address"
+//     })
+//   }
+ if (flagcustomer!=null&&flagaddress!=null)
     {
       var houseNumber=req.body.houseNumber
      var street=req.body.street
@@ -341,7 +341,7 @@ var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
     respone:"null",
     code:"403",
     errors:{
-        error_code:"Authorization_failed",
+        error_code:"400",
         error_msg:"something_went_wrong"
     },
     message:"Unable_to_update_customer_address"
