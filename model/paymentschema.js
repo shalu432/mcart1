@@ -20,6 +20,7 @@ ref:"Customer"
         required: true,
 
     },
+
     
 
     cardholdername:
@@ -27,6 +28,11 @@ ref:"Customer"
         type: String,
         uppercase:true,
         require: true
+    },
+    cardname:
+    {
+        type:String,
+        enum:["mastercard","visa"]
     },
 
     cvv:
