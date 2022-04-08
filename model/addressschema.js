@@ -25,15 +25,16 @@ const AddressSchema = new mongoose.Schema({
             },
             Locality : {
                 type:String,
-                match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
+                match:[/^[A-Za-z]+$/,'Please fill a valid LocalityName'],
+        
             },
             city:{
                 type:String,
-                match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
+                match:[/^[A-Za-z]+$/,'Please fill a valid cityName'],
             },
             state:{
                 type:String,
-                match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
+                match:[/^[A-Za-z]+$/,'Please fill a valid stateName'],
             },
             pincode:{
                 type :String,
