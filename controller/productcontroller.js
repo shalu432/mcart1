@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Product = require('../model/productschema')
 const Merchant = require('../model/merchantschema')
+const Category= require('../model/Categoryschema')
 //product
 const getAllProduct = async (req, res) => {
     try {
@@ -120,18 +121,51 @@ await Merchant.findOne({merchantId:merchantId})
             res.status(200).json({ 
                 
                 status:'true',
+                error:{},
                     Response:result
                  })
             
         })
         .catch(err => {
             res.status(500).json({
+                status:"true",
+                response:"null",
                 error: err
             })
         })
 
     }
 }
+
+
+const  addCategory = async(req,res)=>
+{
+    const category = new Category({
+        categoryName: req.body.categoryName,
+        brandName: req.body.brandNam
+    })
+    category.save()
+    .then(result => {
+        
+        res.status(200).json({ 
+            
+            status:'true',
+            error:{},
+                Response:result
+             })
+        
+    })
+    .catch(err => {
+        res.status(500).json({
+            status:"true",
+            response:"null",
+            error: err
+        })
+    })
+
+}
+
+
 
 const updateProductbyMerchant = async (req, res) => {
 
@@ -187,6 +221,7 @@ module.exports = {
     updateProductbyMerchant,
     deleteProductbyMerchant,
    productRecord ,
+   addCategory
   
    
    

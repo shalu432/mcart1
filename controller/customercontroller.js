@@ -318,9 +318,9 @@ var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
       $set: {
         houseNumber,street,Locality,city,pincode
       }
-    }).then(() => res.status(201).json(
+    }).then((result) => res.status(201).json(
       {status:"true",
-      respone:null,
+      respone:result,
       code:"201",
       errors:{
       },

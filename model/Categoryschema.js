@@ -16,10 +16,11 @@ category:
             
         },
        
-        brandName : {
+        brandName :[{
          type:String,
          
          
-        }}]
+        }]}
+    ]
 })
 module.exports = mongoose.model('Category',CategorySchema)

@@ -15,4 +15,5 @@ router.get('/productRecord',midd.midJWT,prod.productRecord)
 router.post('/addProduct',midd.midJWT,prod.addProductbyMerchant)
  router.put('/updateProduct/:id',midd.midJWT,prod.updateProductbyMerchant)
  router.delete('/deleteProduct/:id',midd.midJWT,prod.deleteProductbyMerchant)
+ router.post('/addcategory',prod.addCategory)
 module.exports = router

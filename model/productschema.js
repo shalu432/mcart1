@@ -16,15 +16,19 @@ const ProductSchema = new mongoose.Schema({
     },
     discountedCost:{
         type:Number,
-        required:true
+      required:true
     },
    
     shortDescription:{
         type:String,
+        //minlength:10,
+        maxlength:150,
         require:true
     },
     longDescription:{
         type:String,
+       // minlength:50,
+        maxlength:500,
         require:true
     },
     quantity:{
