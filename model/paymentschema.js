@@ -13,6 +13,7 @@ ref:"Customer"
     cardnumber:
     {
         type: Number,
+        uppercase:true,
 
         minlength:16,
         maxlength:16,
@@ -24,6 +25,7 @@ ref:"Customer"
     cardholdername:
     {
         type: String,
+        uppercase:true,
         require: true
     },
 

@@ -11,17 +11,21 @@ category:
             require:true
         },
     
-        categoryName :{
-            type:String,
+        // categoryName :{
+        //     type:String,
             
-        }
-    }
+        // }
+    categoryId:{
+        
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Category",
+    },
        
-    //     brandName :[{
-    //      type:String,
+        brandName :[{
+         type:String,
          
          
-    //     }]}
+        }]}
     // ]
 })
 module.exports = mongoose.model('Category',CategorySchema)
