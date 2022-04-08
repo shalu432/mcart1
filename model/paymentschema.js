@@ -13,7 +13,6 @@ ref:"Customer"
     cardnumber:
     {
         type: Number,
-        uppercase:true,
 
         minlength:16,
         maxlength:16,

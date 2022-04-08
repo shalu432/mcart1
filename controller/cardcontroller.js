@@ -15,7 +15,7 @@ await Payment.findOne({customerId: customerId})
     if(req.body.cardnumber && req.body.cardname && req.body.cardholdername && req.body.cvv && req.body.expdate && (req.body.cardnumber.toString().length)>=16 && (req.body.cardnumber.toString().length)<=16 && req.body.cvv.toString().length>=3 && req.body.cvv.toString().length <=3)
    {
  
-    var email= req.body.email
+   // var email= req.body.email
     var cardnumber = req.body.cardnumber;
     var cardname = req.body.cardname;
     var cardholdername = req.body.cardholdername;
@@ -25,13 +25,13 @@ await Payment.findOne({customerId: customerId})
     
     var paymentId = key.randomBytes(6).toString('hex')
    
-     var token =await Customer.find({email:email})
+     var token =await Customer.find({customerId:customerId})
      if(token.length!=0){
      
         var data = {
     
     'customerId':customerId,
-     'email' : email,
+    // 'email' : email,
      'cardnumber': cardnumber,
       'cardname' : cardname,
      'cardholdername': cardholdername,
@@ -48,7 +48,7 @@ await Payment.findOne({customerId: customerId})
         response:val
     })).catch((err)=>res.send(err))
     
- }else{res.send('email  Not Found')}
+ }else{res.send('customer  Not Found')}
 }
 
 else{
