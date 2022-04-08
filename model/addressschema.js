@@ -24,13 +24,16 @@ const AddressSchema = new mongoose.Schema({
              type:String
             },
             Locality : {
-                type:String
+                type:String,
+                match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
             },
             city:{
-                type:String
+                type:String,
+                match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
             },
             state:{
-                type:String
+                type:String,
+                match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
             },
             pincode:{
                 type :String,
