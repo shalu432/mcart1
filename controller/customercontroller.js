@@ -70,6 +70,7 @@ const add = new Address({
     street:req.body.address.street,
     Locality : req.body.address.Locality,
     city : req.body.address.city,
+    state:req.body.address.state,
     pincode:req.body.address.pincode
 })
 await add.save()
@@ -82,6 +83,7 @@ const addr= await Address.findOne({
     street:req.body.address.street,
     Locality : req.body.address.Locality,
     city : req.body.address.city,
+    state:req.body.address.state,
     pincode:req.body.address.pincode},{_id:1})
 
    // console.log(addr)
@@ -287,20 +289,20 @@ const updateAddress = async(req,res)=> {
 try{
 
 
-var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
+//var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
   var flagaddress = await Address.findOne({_id:req.query.address},{})
  // console.log(flagaddress,flagcustomer)
-  if(flagcustomer==null){
-    res.status(201).json({status:"false",
-    respone:"null",
-    code:"403",
-    errors:{
-        error_code:"failed_to_update",
-        error_msg:"invalid_customer_id"
-    },
-    message:"Unable_to_update_customer_address"
-    })
-  }
+//   if(flagcustomer==null){
+//     res.status(201).json({status:"false",
+//     respone:"null",
+//     code:"403",
+//     errors:{
+//         error_code:"failed_to_update",
+//         error_msg:"invalid_customer_id"
+//     },
+//     message:"Unable_to_update_customer_address"
+//     })
+//   }
   if(flagaddress==null){
     res.status(201).json({status:"false",
     respone:"null",
@@ -312,21 +314,27 @@ var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
     message:"Unable_to_update_customer_address"
     })
   }
-   else if (flagcustomer!=null&&flagaddress!=null)
+   else if (flagaddress!=null)
     {
       var houseNumber=req.body.houseNumber
      var street=req.body.street
      var Locality=req.body.Locality
      var city=req.body.city
+     var state=req.body.state
      var pincode =req.body.pincode
      
-    await Address.updateOne({ _id:req.query.address,customerId:req.query.customer },{
+    await Address.findByIdAndUpdate(req.query.address,{
       $set: {
-        houseNumber,street,Locality,city,pincode
+        houseNumber:houseNumber,
+        street:street,
+        Locality:Locality,
+        city:city,
+        state:state,
+        pincode:pincode
       }
-    },{new:true}).then(() => res.status(201).json(
+    },{new:true}).then((result) => res.status(201).json(
       {status:"true",
-     // respone:result,
+      respone:result,
       code:"201",
       errors:{
       },
@@ -355,7 +363,7 @@ var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
   }
 }catch(error)
 {
-    res.json(err)
+    res.json(error)
 }
 }
 

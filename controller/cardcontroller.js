@@ -56,21 +56,47 @@ else{
 }}
 }
 catch(error){
-res.json("error")
+res.json({
+    val:error.message
+})
 }
 }
 
 
 
 const updatePayment=async (req,res) => {
-    
+    try{
    var cardnumber = req.body.cardnumber;
  var cardholdername = req.body.cardholdername;
    var cvv = req.body.cvv;
    var expdate = req.body.expdate
     const key = req.params.key
-    var value = await Payment.updateOne({paymentId:key},{$set:{cardnumber,cardholdername,cvv,expdate}});
-    res.send(value) 
+    var flag = await Payment.findOne({paymentId:req.query.key})
+    await Payment.findByIdAndUpdate(flag._id,{$set:{cardnumber,cardholdername,cvv,expdate}},{new:true})
+    .then((data)=>
+    {
+        res.json({
+            status:true,
+            message : "successfully Updated",
+            response:data
+        })
+    })
+    .catch(()=>
+    {res.json({
+        error:
+        {
+            error:"payment not found"
+        }
+    })
+
+    })
+        
+            
+        
+    }catch(error){
+        res.json(error)
+    }
+    
    // console.log(value)
    
 }
@@ -95,7 +121,8 @@ const getPayment= async(req,res) => {
            const cus = await Payment.find()
            res.json({
                status:"true",
-               response:cus
+               response:cus,
+               error:{}
            })
     }catch(err){
         res.send('Error ' + err)
