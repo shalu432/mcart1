@@ -314,7 +314,7 @@ var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
      var city=req.body.city
      var pincode =req.body.pincode
      
-    await Address.updateOne({ _id:req.query.address,customerId:req.query.customer },{
+    await Address.findOneAndUpdate({ _id:req.query.address,customerId:req.query.customer },{
       $set: {
         houseNumber,street,Locality,city,pincode
       }
