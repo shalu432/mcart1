@@ -49,7 +49,8 @@ try{
     const quantity = Number.parseInt(req.body.quantity);
     let cart = await Cart.findOne({ customerId: customerId});
     const productDetails = await Product.findById(productId);
-    //console.log("cartDetails", cart)
+   // console.log(productDetails)
+    
     //-- Check if cart Exists and Check the quantity if items -------
     if (cart){
         let indexFound = cart.items.findIndex(p => p.productId == productId);
@@ -70,10 +71,10 @@ try{
                 price: productDetails.baseCost,
                 discountedCost: productDetails.discountedCost,
                 size:productDetails.size,
-                shortDescription: productDetails.shortDescription,
-                longDescription: productDetails.longDescription,
-                categoryName:productDetails.categoryName,
-                brandName:productDetails.brandName,
+               // shortDescription: productDetails.shortDescription,
+                //longDescription: productDetails.longDescription,
+                categoryId:productDetails.categoryId,
+                brandId:productDetails.brandId,
                 available:productDetails.available,
                 total: parseInt(productDetails.discountedCost * quantity),
             })
@@ -99,10 +100,10 @@ try{
                 quantity: quantity,
                 total: parseInt(productDetails.discountedCost* quantity),
                 price: productDetails.baseCost,
-                shortDescription:productDetails.shortDescription,
-                longDescription:productDetails.longDescription,
-                categoryName:productDetails.categoryName,
-                brandName:productDetails.brandName,
+                //shortDescription:productDetails.shortDescription,
+               // longDescription:productDetails.longDescription,
+                categoryId:productDetails.categoryId,
+                brandId:productDetails.brandId,
                 available:productDetails.available
                 //note: note
             }],

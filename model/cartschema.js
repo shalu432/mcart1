@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Product = require('../model/productschema')
 const Customer = require("../model/customerschema")
+const Category= require('../model/Categoryschema')
+const Brand = require('../model/brandschema')
 const Schema = mongoose.Schema;
 let ItemSchema = new Schema(
   {
@@ -16,12 +18,12 @@ let ItemSchema = new Schema(
       required: true,
       min: [1, "Quantity can not be less then 1."],
     },
-    shortDescription:{
-      type:String
-    },
-    longDescription:{
-      type:String
-    },
+    // shortDescription:{
+    //   type:String
+    // },
+    // longDescription:{
+    //   type:String
+    // },
     available:{
       type:Boolean
     },
@@ -29,11 +31,15 @@ let ItemSchema = new Schema(
       type: Number,
      // required: true,
     },
-    categoryName:{
-      type:String
-    },
-    brandName:{
-      type:String
+    
+    categoryId:{
+        
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Category",
+  },
+    brandId:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Brand",
     },
     size:{
       type:String,

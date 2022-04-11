@@ -5,7 +5,7 @@ const Cart = require('../model/cartschema')
 const Customer = require('../model/customerschema')
 const Payment=require('../model/paymentschema')
 const crypto = require("crypto")
-
+const Refund=require('../model/refundschema')
 const getAllOrder = async(req,res) => {
     try{
            const ord = await Order.find()
@@ -14,7 +14,7 @@ const getAllOrder = async(req,res) => {
              response:ord
            })
         //  res.json(ord)
-    }catch(err){
+    }catch{
         res.send({
           error:{
             message:"error",
@@ -124,19 +124,46 @@ const orderPayment = async(req,res)=>
 
  const cancelOrder = async(req,res)=>
  {
+   
 try {
-  const ord = await Order.findByIdAndDelete(req.params.orderId)
+  const order = await Order.findOne(req.query.id)
+  console.log(order)
+  var doc = new Refund({
+    customerId:order.customerId,
+    orderId:req.query.id,
+    refundAmount:order.totalCost,
+    transactionId:order.transactionId
+
+  })
+  doc.save().then(async(data)=>
+  {
+    console.log(data)
+    await Order.findByIdAndUpdate(req.query.id,{
+      $set:{
+        status:"cancled"
+      }
+    },{new:true,runValidator:true
+  })
   res.json({
     status:true,
     message:"order deleted",
-    response:ord
+    response:data
   })
-} catch (err) {
+} ).catch((err)=>{
+      res.json(err.message)
+})
+
+
+
+
+
+}catch(error) {
   res.send({
     error: error
   })
 }
 }
+
 const orderStatus = async(req,res) => {
   try{
          const ord = await Order.findByIdAndUpdate(req.query.orderId).then((data)=>

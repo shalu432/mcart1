@@ -3,16 +3,19 @@ const AdminSchema = new mongoose.Schema({
 
     firstName : {
         type:String,
+        match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
         require:true
 
     },
     lastName : {
         type:String,
+        match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
         require:true
 
     },
     email:{
        type:String,
+       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
        require : true 
     },
     password:{
