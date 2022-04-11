@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Orderr = require('../model/orderschema')
+const Order = require('../model/orderschema')
 
  const middCustomer = require ("../middleware/middleware1")
 
@@ -9,6 +9,7 @@ router.post('/addorder',cust.addOrder)
 router.post('/orderPayment',cust. orderPayment)
 router.get('/getorder',cust.getAllOrder)
 router.delete('/deleteorder',cust.cancelOrder)
+router.put('/deleteorder',cust.deleteOrder)
 router.get('/getorder',cust.getOrder)
 router.patch('/orderstatus',cust.orderStatus)
 

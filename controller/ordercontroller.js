@@ -4,6 +4,8 @@ const Order = require('../model/orderschema')
 const Cart = require('../model/cartschema')
 const Customer = require('../model/customerschema')
 const Payment=require('../model/paymentschema')
+const crypto = require("crypto")
+
 const getAllOrder = async(req,res) => {
     try{
            const ord = await Order.find()
@@ -73,18 +75,18 @@ const getAllOrder = async(req,res) => {
 }
 const orderPayment = async(req,res)=>
 {
-  try{
+ // try{
   var customerId =req.query.customerId;
   var paymentId =req.query.paymentId;
   var cart = await Order.findOne({customerId:customerId})
-  {
-   await Payment.findOne({ customerId: customerId,paymentId:paymentId}).then((pay)=>{
+  
+   await Payment.find({ customerId: customerId,paymentId:paymentId}).then((pay)=>{
   if(pay)
   {
     //let transId;
   var transactionid = crypto.randomBytes(6).toString('hex');
    pay.transactionid=transactionid
-    let status='Ordered';
+    let status='ordered';
        
      
       const orderdata={
@@ -97,19 +99,29 @@ const orderPayment = async(req,res)=>
         transactionId:transactionid
         }
         const order=new Order(orderdata);
-         order.save().then(()=>{
-            res.end('payment Successfully!');
+         order.save().then((data)=>{
+          // console.log(data)
+          res.send({
+            status:true,
+            message:"payment successfully",
+            error:{},
+            response:data
+          });
         })
           }  
            else{
-            res.json(error)
+            res.json("error")
         }
       })
     } 
-}catch(error){
-res.send("error")
-}
-} 
+// }catch(error){
+// res.send("errorrrrr")
+// }
+// } 
+
+
+
+
  const cancelOrder = async(req,res)=>
  {
 try {
@@ -149,7 +161,21 @@ const orderStatus = async(req,res) => {
 }
  
 
-
+const deleteOrder = async(req, res) => {
+  try{
+await Order.findOneAndUpdate({customerId :(req.query.customerId)}, { $pull: { items : {productId:(req.query.productId) }}}, {multi: true}).then(data=>{
+    res.json({
+        status:"true",
+        error:{},
+     message  :"deleted successfully",
+       response:data
+    })
+  })
+  }
+  catch(err){
+    res.json(err);
+  }
+  }
  
    
  
@@ -159,7 +185,9 @@ module.exports={
     orderPayment,
     cancelOrder,
     getOrder,
-    orderStatus
+    orderStatus,
+    deleteOrder
+    
     
     
 }

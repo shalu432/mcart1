@@ -122,11 +122,13 @@ try{
     }
     const deleteCart = async(req, res) => {
       try{
-    var cus =  await Cart.findOneAndUpdate({customerId :(req.query.customerId)}, { $pull: { items : {productId:(req.query.productId) }}}, {multi: true}).then(data=>{
+    await Cart.findOneAndUpdate({customerId :(req.query.customerId)}, { $pull: { items : {productId:(req.query.productId) }}}, {multi: true}).then(data=>{
         res.json({
+            status:"true",
+            error:{},
          message  :"deleted successfully",
-            error:"null",
-            response:cus
+           
+            response:data
         })
       })
       }

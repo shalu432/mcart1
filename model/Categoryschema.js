@@ -2,20 +2,20 @@ const mongoose = require('mongoose')
 const CategorySchema = new mongoose.Schema({
     
 
-category:
+// category:
 
-    {
-         type:
-        {
-            type:String,
-            require:true
-        },
+//     {
+//          type:
+//         {
+//             type:String,
+//             require:true
+//         },
     
         categoryName :{
             type:String,
             
         }
-    }
+    
        
     //     brandName :[{
     //      type:String,

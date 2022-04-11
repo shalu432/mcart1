@@ -3,6 +3,7 @@ const router = express.Router()
 const Product = require('../model/productschema')
 const Merchant = require('../model/merchantschema')
 const Category= require('../model/Categoryschema')
+const Brand = require('../model/brandschema')
 //product
 const getAllProduct = async (req, res) => {
     try {
@@ -82,9 +83,14 @@ const productRecord = (req, res, next) => {
 
 
 const addProductbyMerchant = async (req, res) => {
+    try{
 var merchantId=req.query.merchantId
+var categoryId=req.query.categoryId
+var brandId=req.query.brandId
 await Merchant.findOne({merchantId:merchantId})
 {
+    await Brand.findOne({categoryId:categoryId,brandId:brandId})
+    {
     var quantity = req.body.quantity;
     var available=avail(quantity);
     function avail(q){
@@ -106,9 +112,10 @@ await Merchant.findOne({merchantId:merchantId})
         discountedCost:(req.body.baseCost-(req.body.discount*req.body.baseCost/100)),
        
        size: req.body.size,
-        categoryName:req.body.categoryName,
+       categoryId: categoryId,
+       brandId:brandId,
     
-        brandName:req.body.brandName,
+    
         quantity: req.body.quantity,
         available:available
         
@@ -130,19 +137,29 @@ await Merchant.findOne({merchantId:merchantId})
             res.status(500).json({
                 status:"true",
                 response:"null",
-                error: err
+                error: err,
+                //val:error.message
+
             })
         })
 
     }
 }
+}
+catch(error)
+{
+res.json(error)
+
+}
+}
+
 
 
 const  addCategory = async(req,res)=>
 {
     const category = new Category({
         categoryName: req.body.categoryName,
-        brandName: req.body.brandNam
+       // brandName: req.body.brandNam
     })
     category.save()
     .then(result => {

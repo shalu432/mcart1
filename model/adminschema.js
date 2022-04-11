@@ -1,7 +1,12 @@
 const mongoose = require('mongoose')
 const AdminSchema = new mongoose.Schema({
 
-    name : {
+    firstName : {
+        type:String,
+        require:true
+
+    },
+    lastName : {
         type:String,
         require:true
 
@@ -14,9 +19,17 @@ const AdminSchema = new mongoose.Schema({
         type : String,
         require : true
     },
-    // roll:{
-    //     type:Enumerator
-    // }
+     role:{
+        type:String,
+        enum:["ceo","manager","chairman","director"]
+     },
+     isActive:{
+         type:Boolean,
+         default:true,
+         require:true
+     }
+
+
 });
 
 module.exports = mongoose.model('Admin',AdminSchema)

@@ -2,17 +2,17 @@ const express = require('express')
 const router = express.Router()
 const Merchant= require('../model/merchantschema')
 //var bodyParser = require('body-parser')
-//const midd  =require ("../middleware/middleware")
+const middadd  =require ("../middleware/middleware2")
 
 
 
 
  const ven= require('../controller/merchantcontroller')
- router.get('/getmerchant',ven.getMerchant)
- router.post('/addmerchant',ven.addMerchant)
-router.post('/loginmerchant',ven.loginMerchant)
-router.put('/updatemerchant/:id',ven.updateMerchant)
-router.delete('/deletemerchant/:id',ven.deleteMerchant)
+ router.get('/getmerchant',middadd.adminJWT,ven.getMerchant)
+ router.post('/addmerchant',middadd.adminJWT,ven.addMerchant)
+router.post('/loginmerchant',middadd.adminJWT,ven.loginMerchant)
+router.put('/updatemerchant/:id',middadd.adminJWT,ven.updateMerchant)
+router.delete('/deletemerchant/:id',middadd.adminJWT,ven.deleteMerchant)
 
 
 

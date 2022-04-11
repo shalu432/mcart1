@@ -5,11 +5,24 @@ var bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const getAdmin = (req,res)=>
+const getAdmin = async(req,res)=>
 {
-    res.status(200).json({
-        message :""
-    })
+    try{
+        const ord = await Admin.find()
+        res.json({
+         status:true,
+          response:ord
+        })
+     //  res.json(ord)
+ }catch(err){
+     res.send({
+       error:{
+         message:"error",
+         response: null
+       }
+     })
+ }
+
 }
 const addAdmin = async(req,res)=>
 {
@@ -25,9 +38,11 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
         else
         {
             const data = new Admin({
-               name :req.body.name,
-                email:req.body.email,
-                password :hash
+               firstName: req.body.firstName,
+               lastName: req.body.lastName,
+                 email:req.body.email,
+                password :hash,
+                role:req.body.role
                 })
                 data.save()
                 .then(result=>{
@@ -96,11 +111,70 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
 
                 })
     }
+    const updateAdmin = async (req, res) => {
+
+        var pass;
+        bcrypt.genSalt(10, function (err, salt) {
+            bcrypt.hash(req.body.password, 10, async function (err, hash) {
+                if (err) {
+                    return res.status(500).json({
+                        error: err
+                    })
+                } else {
+                    pass = hash;
+                    // console.log(pass)
     
+                     await Admin.findByIdAndUpdate({ _id: req.params.id },
+                        {
+                            $set: {
+                               
+                                firstName: req.body.firstName,
+                                lastName: req.body.lastName,
+                                 email: req.body.email,
+                                password: hash,
+                                role:req.body.role
+                            }
+    
+                        }).then((data)=>
+                        {
+                            res.json({
+                                status:"true",
+                                code:200,
+                                message:"updated successfully",
+                                response:data,
+                        })
+                   
+                       
+                    })
+                }
+            })
+        })
+    }
+    
+
+    const deleteAdmin = async (req, res) => {
+        try {
+            const val = await Admin.findByIdAndDelete(req.params.id)
+            .then((data)=>
+            {
+                res.json({
+                    status:true,
+                    error:{},
+                    response:data})
+            })
+          
+        } catch (err) {
+            res.send({
+                error:err
+            })
+        }
+    }
 
 module.exports = {
     getAdmin,
     addAdmin,
-    loginAdmin
+    loginAdmin,
+    updateAdmin,
+    deleteAdmin
 }
    

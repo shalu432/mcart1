@@ -10,5 +10,8 @@ const midd  =require ("../middleware/middleware2")
  router.get('/getAdmin',adm.getAdmin)
  router.post('/addAdmin',adm.addAdmin)
  router.post('/loginAdmin',adm.loginAdmin)
+ router.put('/updateAdmin/:id',adm.updateAdmin)
+ router.delete('/deleteAdmin/:id',adm.deleteAdmin)
+
 
 module.exports = router;

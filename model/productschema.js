@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Category = require('../model/Categoryschema')
+const Brand = require('../model/brandschema')
 const ProductSchema = new mongoose.Schema({
 
 
@@ -21,13 +22,13 @@ const ProductSchema = new mongoose.Schema({
    
     shortDescription:{
         type:String,
-        //minlength:10,
+        minlength:5,
         maxlength:150,
         require:true
     },
     longDescription:{
         type:String,
-       // minlength:50,
+       minlength:10,
         maxlength:500,
         require:true
     },
@@ -44,28 +45,19 @@ const ProductSchema = new mongoose.Schema({
         enum:['S','M','L','XL','XXL']
     },
    
+   categoryId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Category"
+   },
+   brandId:
+   {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Brand" 
+   },
    
-   
-    // category:
-
-    // {
-    //      type:
-    //     {
-    //         type:String,
-    //         require:true
-    //     },
+     
     
-        categoryName :{
-            type:String,
-            
-        },
-       
-        brandName : {
-         type:String,
-         
-         
-        },
-   // },
+        
     available: {
         type: Boolean,
         required: true,

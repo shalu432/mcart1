@@ -17,7 +17,7 @@ const OrderSchema = new mongoose.Schema({
         {
           type : Number
         },
-        transactionid:{
+        transactionId:{
           type:String
         },
       
@@ -38,7 +38,7 @@ const OrderSchema = new mongoose.Schema({
       // },
       status:{
         type : String,
-        enum:["pending","shipped","delivered","cancled"]
+        enum:["pending","shipped","delivered","cancled","ordered"]
       },
      
 

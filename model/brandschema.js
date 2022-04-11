@@ -1,15 +1,16 @@
 const mongoose = require('mongoose')
-const CategorySchema = new mongoose.Schema({
+const Category = require('../model/Categoryschema')
+const BrandSchema = new mongoose.Schema({
     
 
-category:
+// category:
 
-    {
-         type:
-        {
-            type:String,
-            require:true
-        },
+//     {
+//          type:
+//         {
+//             type:String,
+//             require:true
+//         },
     
         // categoryName :{
         //     type:String,
@@ -21,11 +22,11 @@ category:
         ref:"Category",
     },
        
-        brandName :[{
+        brandName :{
          type:String,
          
          
-        }]}
+        }
     // ]
 })
-module.exports = mongoose.model('Category',CategorySchema)
+module.exports = mongoose.model('Brand',BrandSchema)
