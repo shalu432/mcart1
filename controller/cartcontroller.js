@@ -50,9 +50,13 @@ try{
     let cart = await Cart.findOne({ customerId: customerId});
     const productDetails = await Product.findById(productId);
    // console.log(productDetails)
-    
+    if(productDetails.quantity>quantity)
+    {
     //-- Check if cart Exists and Check the quantity if items -------
+    
+    
     if (cart){
+
         let indexFound = cart.items.findIndex(p => p.productId == productId);
         //console.log("Index", indexFound)
         //----------check if product exist,just add the previous quantity with the new quantity and update the total price-------
@@ -105,7 +109,7 @@ try{
                 categoryId:productDetails.categoryId,
                 brandId:productDetails.brandId,
                 available:productDetails.available
-                //note: note
+                
             }],
             subTotal: (productDetails.discountedCost * quantity)
         }
@@ -117,6 +121,10 @@ try{
         message: "Add to Cart successfully!",
         data: data
     });
+}
+else{
+    res.json("product is not available")
+}
     }catch(err){
           res.json(err)
     }

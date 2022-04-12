@@ -11,11 +11,13 @@ const getAllOrder = async(req,res) => {
            const ord = await Order.find()
            res.json({
             status:true,
+            code:200,
              response:ord
            })
         //  res.json(ord)
     }catch{
         res.send({
+          status:true,
           error:{
             message:"error",
             response: null
@@ -45,32 +47,43 @@ const getAllOrder = async(req,res) => {
   try{
   var customerId=req.query.customerId;
   var addressId= req.query.addressId;
-  const cart = await Cart.findOne({ customerId: customerId,addressId:addressId})
+  const cart = await Cart.findOne({ customerId: customerId})
      await Cart.deleteOne({ customerId: customerId })
     .then(()=>{
        
            if(cart){
+             let status="pending"
             const orderdata={
             customerId:customerId,
             addressId:addressId,
             items:cart.items,
-
-
-            //status:status,
             totalCost:cart.subTotal,
+            status:status
          
             }
             const order=new Order(orderdata);
-             order.save().then(()=>{
-                res.end('Order Successfully!');
+             order.save().then((data)=>{
+                res.send({
+                  state:true,
+                  code:200,
+                  message:"order successfully",
+                  response:data
+                });
             })
        }
         else{
-             res.json("order not placed");
+             res.json({
+              
+                state:false,
+                code:403,
+                message:"order not placed",
+                
+              
+             });
         }
     })
 }catch(err){
-    res.json(err);
+    res.json(error);
 }
 }
 const orderPayment = async(req,res)=>
@@ -78,29 +91,19 @@ const orderPayment = async(req,res)=>
  // try{
   var customerId =req.query.customerId;
   var paymentId =req.query.paymentId;
-  var cart = await Order.findOne({customerId:customerId})
+  var orderId = req.query.orderId
+  var order = await Order.findOne({orderId:orderId})
   
    await Payment.find({ customerId: customerId,paymentId:paymentId}).then((pay)=>{
   if(pay)
   {
     //let transId;
   var transactionid = crypto.randomBytes(6).toString('hex');
-   pay.transactionid=transactionid
+   //pay.transactionid=transactionid
     let status='ordered';
-       
-     
-      const orderdata={
-        customerId:customerId,
-        paymentId:paymentId,
-        items:cart.items,
-        status:status,
-        totalCost:cart.subTotal,
-      //  address:addressId,
-        transactionId:transactionid
-        }
-        const order=new Order(orderdata);
-         order.save().then((data)=>{
-          // console.log(data)
+        order.status=status,
+       order.transactionId=transactionid
+        order.save().then((data)=>{
           res.send({
             status:true,
             message:"payment successfully",
@@ -112,52 +115,56 @@ const orderPayment = async(req,res)=>
            else{
             res.json("error")
         }
-      })
+      }).catch(error=>
+        {
+          res.json({
+            status:false,
+            message:"payment unsucessful",
+            code:404
+          })
+        })
     } 
-// }catch(error){
-// res.send("errorrrrr")
-// }
-// } 
+
 
 
 
 
  const cancelOrder = async(req,res)=>
  {
-   
+   var orderId=req.query.orderId
 try {
-  const order = await Order.findOne(req.query.id)
-  console.log(order)
+   await Order.findOne(req.query.id)
+   {
+
+  const order = await Order.findOne({orderId:orderId})
+ 
+ // console.log(order)
   var doc = new Refund({
     customerId:order.customerId,
-    orderId:req.query.id,
+    orderId:orderId,
     refundAmount:order.totalCost,
     transactionId:order.transactionId
 
   })
   doc.save().then(async(data)=>
   {
-    console.log(data)
+    //console.log(data)
     await Order.findByIdAndUpdate(req.query.id,{
       $set:{
-        status:"cancled"
+        status:"cancelled"
       }
     },{new:true,runValidator:true
   })
   res.json({
     status:true,
-    message:"order deleted",
+    message:"order cancelled",
     response:data
   })
 } ).catch((err)=>{
       res.json(err.message)
 })
-
-
-
-
-
-}catch(error) {
+}}
+catch(error) {
   res.send({
     error: error
   })

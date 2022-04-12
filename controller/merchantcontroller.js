@@ -87,7 +87,7 @@ const loginMerchant = (req, res) => {
                             privateKey,
 
                             {
-                                expiresIn: "24h"
+                                expiresIn: "48h"
                             }
                         );
                         res.status(200).json({

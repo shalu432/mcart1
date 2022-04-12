@@ -148,7 +148,7 @@ await Merchant.findOne({merchantId:merchantId})
 }
 catch(error)
 {
-res.json(error)
+res.json(error.message)
 
 }
 }
@@ -185,40 +185,41 @@ const  addCategory = async(req,res)=>
 
 
 const updateProductbyMerchant = async (req, res) => {
-
-    const val = await Product.findByIdAndUpdate({ _id: req.params.id }, {
+await Merchant.findOne({merchantId:req.query.merchantId})
+await Product.findByIdAndUpdate({ _id: req.params.id }, {
         $set: {
-           
+    
             productName: req.body.productName,
             baseCost: req.body.baseCost,
             shortDescription: req.body.shortDescription,
             longDescription: req.body.longDescription,
             quantity: req.body.quantity,
             discount: req.body.discount,
-        
-           size: req.body.size,
-           categoryName:req.body.categoryName,
-    
-           brandName:req.body.brandName
+            size: req.body.size,
+           categoryId:req.body.categoryId,
+           brandId:req.body.brandId
         
 
 
         }
-    })
-
-    const a1 = await val.save()
-  //  res.json(a1)
-  res.json({
-    status:"true",
-    code:200,
-    message:"updated successfully",
-    response:a1,
-  })
-        .then((result) => {
-            res.status(200).json(result)
+    },{new:true,runValidator:true}).then((data) => {
+            res.json({
+                status:"true",
+                code:200,
+                message:"updated successfully",
+                response:data,
+              })
+           // res.status(200).json(result)
         }).catch((err) => {
-            console.log(err)
-            res.send(err)
+           // console.log(err)
+            res.json({
+                status:"true",
+              //  code:200,
+            error:{
+                error:404
+            }
+                
+              })
         })
 
 }

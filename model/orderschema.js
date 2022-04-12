@@ -2,11 +2,17 @@ const mongoose = require('mongoose')
 const Customer = require('../model/customerschema')
 const Cart = require('../model/cartschema')
 const Payment=require('../model/paymentschema')
+const Product = require('../model/productschema')
+const Address = require('../model/addressschema')
 const OrderSchema = new mongoose.Schema({
     
   customerId:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Customer"
+  },
+  addressId: {
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Address",
   },
         items: {
           type:Array,
@@ -21,10 +27,7 @@ const OrderSchema = new mongoose.Schema({
           type:String
         },
       
-      address: {
-        type:mongoose.SchemaTypes.ObjectId,
-        ref:"Addresses",
-      },
+     
       paymentId: {
         type: mongoose.Schema.Types.ObjectId,
         ref:"Payment",
@@ -32,10 +35,7 @@ const OrderSchema = new mongoose.Schema({
      
 
     
-      // Delivered: {
-      //   type: Boolean,
-      //   default: false,
-      // },
+      
       status:{
         type : String,
         enum:["pending","shipped","delivered","cancled","ordered"]
