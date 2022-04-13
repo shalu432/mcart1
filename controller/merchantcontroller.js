@@ -4,7 +4,7 @@ const Merchant = require('../model/merchantschema')
 var bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { updateOne } = require('../model/merchantschema')
+//const { updateOne } = require('../model/merchantschema')
 
 
 const addMerchant = async (req, res) => {

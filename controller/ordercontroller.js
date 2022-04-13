@@ -149,7 +149,7 @@ try {
   doc.save().then(async(data)=>
   {
     //console.log(data)
-    await Order.findByIdAndUpdate(req.query.id,{
+    await Order.findByIdAndUpdate({_id:orderId},{
       $set:{
         status:"cancelled"
       }

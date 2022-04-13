@@ -251,7 +251,7 @@ try{
                 //address: req.body.address,
                  
         }
-     },{new:true})
+     },{new:true,runValidators:true})
      
      // const a1 = await cus.save()
         
@@ -277,7 +277,7 @@ try{
   })
 }catch(error)
 {
-    res.json(error)
+    res.json(error.message)
 }
 }
 
@@ -287,22 +287,7 @@ try{
 
 const updateAddress = async(req,res)=> {
 try{
-
-
-//var flagcustomer = await Customer.findOne({_id:req.query.customer},{})
   var flagaddress = await Address.findOne({_id:req.query.address},{})
- // console.log(flagaddress,flagcustomer)
-//   if(flagcustomer==null){
-//     res.status(201).json({status:"false",
-//     respone:"null",
-//     code:"403",
-//     errors:{
-//         error_code:"failed_to_update",
-//         error_msg:"invalid_customer_id"
-//     },
-//     message:"Unable_to_update_customer_address"
-//     })
-//   }
   if(flagaddress==null){
     res.status(500).json({status:"false",
     respone:"null",
@@ -332,7 +317,7 @@ try{
         state:state,
         pincode:pincode
       }
-    },{new:true}).then((result) => res.status(201).json(
+    },{new:true,runValidators:true}).then((result) => res.status(201).json(
       {status:"true",
       respone:result,
       code:"200",
