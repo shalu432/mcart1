@@ -146,10 +146,35 @@ else{
       }
       }
     
+const pop = async(req,res)=>{
+    var customerId=req.query.customerId;
+   var cart =  await Cart.findOne({customerId:customerId})
+    {
+        const odd = new Cart({
+            customerId:customerId,
+            //productId:cart.productId
+
+        })
+        await odd.save()
+        .then((data)=>
+        {
+            res.json({
+                response:data
+            })
+        })
+
+        
+    }
+}
+
+
+
+
 
 module.exports = {
     addProductToCart,
     deleteCart,
     getAllCart,
-    getCart
+    getCart,
+   // pop
 }

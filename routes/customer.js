@@ -7,6 +7,8 @@ const otp =require('../model/otpmodel');
 const cust= require('../controller/customercontroller')
 router.post('/login',cust.loginUser)
 router.get('/getcustomer',cust. getCustomer)
+router.get('/getproduct',cust.getProductByCustomer)
+
 router.post('/addCustomer',cust.addCustomer)
 //router.post('/addAddress',cust.addAddress)
 router.post('/verifyOtp',cust.verifyOtp)

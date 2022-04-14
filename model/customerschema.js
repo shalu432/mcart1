@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Address = require('../model/addressschema')
+const Product = require('../model/productschema')
 const CustomerSchema = new mongoose.Schema({
 
     
@@ -72,7 +73,11 @@ const CustomerSchema = new mongoose.Schema({
             
      }],
   
-
+product:[{
+    type:mongoose.SchemaTypes.ObjectId,
+    ref:"Product"
+        
+}]
 //  cardItems:[{
 // type:mongoose.SchemaTypes.ObjectId,
 // ref:'Cart'

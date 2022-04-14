@@ -7,11 +7,12 @@ const otpGenerator = require('otp-generator');
 const bcrypt = require("bcrypt");
 const Otp  = require('../model/otpmodel');
 const jwt = require('jsonwebtoken');
+const Product = require('../model/productschema')
 
 //const { findOne } = require('../model/customerschema');
 //const { updateOne } = require('../model/customerschema')
 const Address = require('../model/addressschema');
-const { status } = require('express/lib/response');
+//const { status } = require('express/lib/response');
 
 const getCustomer= async(req,res) => {
     try{
@@ -31,6 +32,46 @@ const getCustomer= async(req,res) => {
     }
 }
 
+const getProductByCustomer= async(req,res) => {
+    try{
+        const currentPage = req.query.currentPage;//2
+           const pageSize = req.query.pageSize; //10
+
+           const skip = pageSize * (currentPage-1);
+            const limit = pageSize;
+            let query={};
+       
+            if(req.query.keyword){
+                query.$or=[
+                   
+                    { "categoryName" : { $regex: req.query.keyword, $options: 'i' }},
+                    { "brandName" : { $regex: req.query.keyword, $options: 'i' }},
+                    { "productName" : { $regex: req.query.keyword, $options: 'i' }},
+                    { "shortDescription" : { $regex: req.query.keyword, $options: 'i' }},
+                    { "longDescription" : { $regex: req.query.keyword, $options: 'i' }}
+                ];
+            }
+            Product.find(query).skip(skip).limit(limit).sort({[req.query.key]:req.query.value})
+       // await Product.find()
+        .select({"productName":1,"baseCost":1,"longDescription":1,"shortDescription":1,"discountedCost":1,"_id":0})
+        
+        .then((data)=>
+           { res.json({
+            status:200,
+            response:data
+        })})
+           
+          
+    }catch(error){
+        res.send({
+            error:
+            {
+                message :"null",
+                error:error
+            }
+        })
+    }
+}
 
 
 
@@ -127,6 +168,9 @@ catch(error)
 
  const loginUser = async (req, res) => {
   try{
+    Otp.findOne({phoneNumber:req.body.phoneNumber}).then(async(result)=>{
+    if(!result)
+    {
     await Customer.findOne({phoneNumber:req.body.phoneNumber}).then(async(data)=>
     {
 if(data)
@@ -156,26 +200,36 @@ response:"otp sent successfully",
             })
         })
 }
-  })}
+else{
+    res.json("phone number not exist")
+}
+  })
+}
+  else{
+      res.json("try after sometimes otp is not expired")
+}
+  })
 
-    catch(error)
+  }
+  
+  catch(error)
     {
         res.status(404).json("error")
     }
  }
 
-const verifyOtp= (req,res)=>
+const verifyOtp= async(req,res)=>
 {
     try{
-    Customer.findOne({phoneNumber:req.body.phoneNumber}).then(result=>{
-    Otp.find({ phoneNumber:req.body.phoneNumber})
+     await Customer.findOne({phoneNumber:req.body.phoneNumber}).then(async()=>{
+      await Otp.find({ phoneNumber:req.body.phoneNumber})
     .exec()
     .then(data=>
         {
             if(data.length<1)
             {
                 return res.status(401).json({
-                    message: "OTP Expired"
+                    message: "OTP Expired "
                 })
             }
             else{
@@ -194,7 +248,7 @@ const verifyOtp= (req,res)=>
                         },
                         privateKey,
                         {
-                            expiresIn:"48h"
+                            expiresIn:"24h"
                         }
                         );
                         res.status(200).send ({
@@ -210,7 +264,8 @@ const verifyOtp= (req,res)=>
                 })
             }
         })
-    })
+     
+     })
         .catch(err=>
             {
                 res.status(500).json(
@@ -225,9 +280,19 @@ const verifyOtp= (req,res)=>
                     })
             })
 
-        }catch(error)
+        }
+        
+        catch(error)
         {
-            res.json(error)
+            res.json({
+                "status":false,
+                "response": null,
+                "code":500,
+                "error": {
+                "errCode": "FAILED",
+                "errMsg": "Failed to login"
+                },
+            })
         }
        
         }
@@ -378,7 +443,8 @@ module.exports={
     deleteCustomer,
     loginUser,
     verifyOtp,
-    updateAddress
+    updateAddress,
+    getProductByCustomer
 }
    
    
