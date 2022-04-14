@@ -135,7 +135,7 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
                                 role:req.body.role
                             }
     
-                        }).then((data)=>
+                        },{new:true,runValidators:true}).then((data)=>
                         {
                             res.json({
                                 status:"true",
