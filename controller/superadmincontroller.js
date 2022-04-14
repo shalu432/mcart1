@@ -40,7 +40,7 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
             const data = new Admin({
                firstName: req.body.firstName,
                lastName: req.body.lastName,
-                 email:req.body.email,
+                email:req.body.email,
                 password :hash,
                 role:req.body.role
                 })

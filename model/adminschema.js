@@ -17,14 +17,15 @@ const AdminSchema = new mongoose.Schema({
     email:
     {
         type: String,
-        unique: true,
+      
+       unique:true,
         lowercase: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
-        required: true
-
+        
     },
     password:{
         type : String,
+       // unique:true,
         require : true
     },
      role:{
