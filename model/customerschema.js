@@ -28,7 +28,7 @@ const CustomerSchema = new mongoose.Schema({
         type:Date,
         min:'01-01-1960',
         max:'01-12-2002',
-        require: true
+        required: true
         
     },
 
@@ -42,7 +42,7 @@ const CustomerSchema = new mongoose.Schema({
                 throw new Error("Enter a valid  phone number")
             }
         },
-        require:true
+        required:true
     }, 
       
 
@@ -61,7 +61,7 @@ const CustomerSchema = new mongoose.Schema({
     {
         type: String,
         match: [/^(\+?\d{1,3}|\d{1,4})$/gm],
-       require: true
+       required: true
     },
 
 

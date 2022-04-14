@@ -16,13 +16,13 @@ const MerchantSchema = new mongoose.Schema({
     Gender: {
         type: String,
         enum:["male","female","others"],
-      require: true
+      required: true
     },
     DOB: {
         type: Date,
         min:Date[1960-01-01],
         max:Date.now,
-        require: true
+        required: true
         
     },
 
@@ -37,7 +37,7 @@ const MerchantSchema = new mongoose.Schema({
                 throw new Error("Enter a valid  phone number")
             }
         },
-        require:true
+        required:true
     },
     Email:
     {
@@ -53,7 +53,7 @@ const MerchantSchema = new mongoose.Schema({
     {
         type: String,
         match: [/^(\+?\d{1,3}|\d{1,4})$/gm],
-       require: true
+       required: true
     },
 
 
@@ -100,7 +100,7 @@ const MerchantSchema = new mongoose.Schema({
 
     password:{
         type : String,
-        require : true,
+        required : true,
 
 
     }

@@ -5,30 +5,30 @@ const AdminSchema = new mongoose.Schema({
         type:String,
         match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
         trim:true,
-        require:true
+        required:true
 
     },
     lastName : {
         type:String,
         match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
         trim:true,
-        require:true
+        required:true
 
     },
     
     email:
     {
         type: String,
-      
        unique:true,
-        lowercase: true,
+      //  lowercase: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
+        required:true
         
     },
     password:{
         type : String,
        // unique:true,
-        require : true
+        required: true
     },
      role:{
         type:String,
@@ -37,7 +37,7 @@ const AdminSchema = new mongoose.Schema({
      isActive:{
          type:Boolean,
          default:true,
-         require:true
+         required:true
      }
 
 

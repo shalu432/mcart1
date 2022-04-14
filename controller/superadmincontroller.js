@@ -47,13 +47,15 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
                 data.save()
                 .then(result=>{
                     res.status(200).json({
+                        status:true,
+                        code:"200",
                         new_data :result
 
                     })
                  })
                  .catch(err=>{
                      res.status(500).json({
-                         error:err
+                         error:err.message
                      })
                  })
                 
@@ -106,14 +108,14 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
             .catch(err=>
                 {
                     res.status(500).json({
-                        err:err
+                        err:err.message
                     })
 
                 })
     }
     const updateAdmin = async (req, res) => {
 
-        var pass;
+       // var pass;
         bcrypt.genSalt(10, function (err, salt) {
             bcrypt.hash(req.body.password, 10, async function (err, hash) {
                 if (err) {
@@ -145,6 +147,14 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
                         })
                    
                        
+                    }).catch(err=>{
+                        res.json({
+                            status:"false",
+                            error:err.message,
+                            
+                    })
+               
+                        
                     })
                 }
             })
@@ -165,7 +175,9 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
           
         } catch (err) {
             res.send({
-                error:err
+                status:"false",
+                response:"null",
+                error:err.message
             })
         }
     }
