@@ -27,7 +27,7 @@ const addMerchant = async (req, res) => {
                 phoneNumber: req.body.phoneNumber,
                 Email: req.body.Email,
                 countryCode: req.body.countryCode,
-                address: req.body.address,
+               // address: req.body.address,
 
                 createdAt: req.body.createdAt,
                 password: hash
@@ -146,7 +146,7 @@ const updateMerchant = async (req, res) => {
                 pass = hash;
                 // console.log(pass)
 
-                await Merchant.updateOne({ _id: req.params.id },
+                await Merchant.findByIdAndUpdate({ _id: req.params.id },
                     {
                         $set: {
                             // name:req.body.name,
@@ -165,7 +165,7 @@ const updateMerchant = async (req, res) => {
                             password: hash
                         }
 
-                    }).then((data)=>{
+                    },{new:true,runValidators:true}).then((data)=>{
                         res.json({
                             status:"true",
                             code:200,
@@ -186,10 +186,12 @@ const deleteMerchant = async (req, res) => {
       res.json({
         status:true,
         error:{},
-        response:"merchant deleted successfully"})
+        message:"merchant deleted successfully",
+        response:val
+    })
     } catch (err) {
         res.send({
-            error:err
+            error:err.message
         })
     }
 }
