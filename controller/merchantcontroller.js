@@ -82,6 +82,7 @@ const loginMerchant = (req, res) => {
                         const token = jwt.sign({
                            
                             email: data[0].email,
+                           
 
                         },
                             privateKey,

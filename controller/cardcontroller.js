@@ -46,7 +46,9 @@ await Payment.findOne({customerId: customerId})
         response:"successfully",
         error:{},
         response:val
-    })).catch((err)=>res.send(err))
+    })).catch((err)=>res.json({
+        error:err.message
+    }))
     
  }else{res.send('customer  Not Found')}
 }
@@ -57,7 +59,7 @@ else{
 }
 catch(error){
 res.json({
-    val:error.message
+    error:error.message
 })
 }
 }
@@ -86,7 +88,8 @@ const updatePayment=async (req,res) => {
     {res.json({
         error:
         {
-            error:"payment not found"
+            error:"payment not found",
+            error:error.message
         }
     })
 
@@ -95,7 +98,9 @@ const updatePayment=async (req,res) => {
             
         
     }catch(error){
-        res.json(error)
+        res.json({
+            error:error.message
+        })
     }
     
    // console.log(value)

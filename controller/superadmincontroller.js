@@ -29,6 +29,10 @@ const getAdmin = async(req,res)=>
 const addAdmin = async(req,res)=>
 {
 //var salt = bcrypt.genSaltSync(10);
+Admin.findOne({email:req.body.email}).then((data)=>{
+
+
+if(!data)
 bcrypt.hash(req.body.password,10,(err,hash)=>
 {
     if(err)
@@ -66,6 +70,10 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
         }
      
         })
+        else{
+            res.json("email  already exist")
+        }
+    })
     }
     const loginAdmin = (req,res)=>
     {

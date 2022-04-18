@@ -92,37 +92,43 @@ const orderPayment = async(req,res)=>
   var customerId =req.query.customerId;
   var paymentId =req.query.paymentId;
   var orderId = req.query.orderId
-  var order = await Order.findOne({orderId:orderId})
-  
-   await Payment.find({ customerId: customerId,paymentId:paymentId}).then((pay)=>{
-  if(pay)
-  {
-    //let transId;
-  var transactionid = crypto.randomBytes(6).toString('hex');
-   //pay.transactionid=transactionid
-    let status='ordered';
-        order.status=status,
-       order.transactionId=transactionid
-        order.save().then((data)=>{
-          res.send({
-            status:true,
-            message:"payment successfully",
-            error:{},
-            response:data
-          });
-        })
-          }  
-           else{
-            res.json("error")
-        }
-      }).catch(error=>
+  await Order.findOne({_id:orderId}).then(async(data)=>{
+    if(data){
+      await Payment.find({ customerId: customerId,paymentId:paymentId}).then((pay)=>{
+        if(pay)
         {
-          res.json({
-            status:false,
-            message:"payment unsucessful",
-            code:404
-          })
-        })
+          //let transId;
+        var transactionid = crypto.randomBytes(6).toString('hex');
+         //pay.transactionid=transactionid
+          let status='ordered';
+              data.status=status,
+             data.transactionId=transactionid
+              data.save().then((data)=>{
+                res.send({
+                  status:true,
+                  message:"payment successfully",
+                  error:{},
+                  response:data
+                });
+              })
+                }  
+                 else{
+                  res.json("error")
+              }
+            }).catch(error=>
+              {
+                res.json({
+                  status:false,
+                  message:"payment unsucessful",
+                  code:404
+                })
+              })
+    }
+    else{
+      res.json("Order not Placed")
+    }
+  })
+   
     } 
 
 
@@ -132,84 +138,100 @@ const orderPayment = async(req,res)=>
  const cancelOrder = async(req,res)=>
  {
    var orderId=req.query.orderId
+   
 try {
-   await Order.findOne(req.query.id)
-   {
-
-  const order = await Order.findOne({orderId:orderId})
+   
+  await Order.findOne({_id:orderId,status:"ordered"}).then((data)=>
+  {
+    if(data)
+    {
+      
+    var doc = new Refund({
+      customerId:data.customerId,
+      orderId:data,orderId,
+      refundAmount:data.totalCost,
+      transactionId:data.transactionId
+  
+    })
+    doc.save().then(async(data)=>
+    {
+      //console.log(data)
+      await Order.findByIdAndUpdate({_id:orderId},{
+        $set:{
+          status:"cancelled"
+        }
+      },{new:true,runValidator:true
+    })
+    res.json({
+      status:true,
+      message:"order cancelled",
+      response:data
+    })
+  } ).catch((err)=>{
+        res.json(err.message)
+  })
+}
+else{
+  
+  res.json({
+    status:"false",
+    error:{},
+    message:"payment incomplete"
+  })
+}
+  })
  
  // console.log(order)
-  var doc = new Refund({
-    customerId:order.customerId,
-    orderId:orderId,
-    refundAmount:order.totalCost,
-    transactionId:order.transactionId
-
-  })
-  doc.save().then(async(data)=>
-  {
-    //console.log(data)
-    await Order.findByIdAndUpdate({_id:orderId},{
-      $set:{
-        status:"cancelled"
-      }
-    },{new:true,runValidator:true
-  })
-  res.json({
-    status:true,
-    message:"order cancelled",
-    response:data
-  })
-} ).catch((err)=>{
-      res.json(err.message)
-})
-}}
+  
+}
 catch(error) {
   res.send({
-    error: error
+    status:"false",
+    response:"null",
+    error: error.message
   })
 }
 }
 
-const orderStatus = async(req,res) => {
-  try{
-         const ord = await Order.findByIdAndUpdate(req.query.orderId).then((data)=>
-         {
-          data.status = req.body.status
-          data.save().then((result)=>{
-            res.json(result)
-           })
-        })
+// const orderStatus = async(req,res) => {
+//   try{
+//          const ord = await Order.findByIdAndUpdate(req.query.orderId).then((data)=>
+//          {
+//           data.status = req.body.status
+//           data.save().then((result)=>{
+//             res.json(result)
+//            })
+//         })
          
          
         
-      //  res.json(ord)
-  }catch(err){
-      res.send({
-        error:{
-          message:"order not placed ",
+//       //  res.json(ord)
+//   }catch(err){
+//       res.send({
+//         error:{
+//           message:"order not placed ",
           
-        }
-      })
-  }
-}
+//         }
+//       })
+//   }
+// }
  
 
-const deleteOrder = async(req, res) => {
-  try{
-await Order.findOneAndUpdate({customerId :(req.query.customerId)}, { $pull: { items : {productId:(req.query.productId) }}}, {multi: true}).then(data=>{
-    res.json({
-        status:"true",
-        error:{},
-     message  :"deleted successfully",
-       response:data
-    })
-  })
-  }
-  catch(err){
-    res.json(err);
-  }
-  }
+// const deleteOrder = async(req, res) => {
+//   try{
+// await Order.findOneAndUpdate({customerId :(req.query.customerId)}, { $pull: { items : {productId:(req.query.productId) }}}, {multi: true}).then(data=>{
+//     res.json({
+//         status:"true",
+//         error:{},
+//      message  :"deleted successfully",
+//        response:data
+//     })
+//   })
+//   }
+//   catch(err){
+//     res.json(err);
+//   }
+//   }
  
    
  
@@ -219,8 +241,8 @@ module.exports={
     orderPayment,
     cancelOrder,
     getOrder,
-    orderStatus,
-    deleteOrder
+   // orderStatus,
+    //deleteOrder
     
     
     

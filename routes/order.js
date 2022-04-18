@@ -5,13 +5,13 @@ const Refund=require('../model/refundschema')
  const middCustomer = require ("../middleware/middleware1")
 
 const cust= require('../controller/ordercontroller')
-router.post('/addorder',cust.addOrder)
-router.post('/orderPayment',cust. orderPayment)
-router.get('/getorder',cust.getAllOrder)
-router.delete('/cancelorder',cust.cancelOrder)
-router.put('/deleteorder',cust.deleteOrder)
-router.get('/getorder',cust.getOrder)
-router.patch('/orderstatus',cust.orderStatus)
+router.post('/addorder',middCustomer.JWT,cust.addOrder)
+router.post('/orderPayment',middCustomer.JWT,cust. orderPayment)
+router.get('/getorder',middCustomer.JWT,cust.getAllOrder)
+router.delete('/cancelorder',middCustomer.JWT,cust.cancelOrder)
+//router.put('/deleteorder',cust.deleteOrder)
+router.get('/getorder',middCustomer.JWT,cust.getOrder)
+//router.patch('/orderstatus',cust.orderStatus)
 
 
 module.exports = router;
