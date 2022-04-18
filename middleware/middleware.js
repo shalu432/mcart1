@@ -13,7 +13,8 @@ var midJWT = (req,res,next)=>{
             res.send({message:"invalid token"})
         }
         else{
-            
+            //console.log(decoded)
+            req.merchant=decoded.id
             next();
         }
     }) 

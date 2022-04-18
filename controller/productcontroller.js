@@ -105,68 +105,72 @@ const productRecord = (req, res, next) => {
 
 const addProductbyMerchant = async (req, res) => {
     try{
-var merchantId=req.query.merchantId
+//var merchantId=req.query.merchantId
 var categoryId=req.query.categoryId
 var brandId=req.query.brandId
-await Merchant.findOne({merchantId:merchantId})
-{
-    await Brand.findOne({categoryId:categoryId,brandId:brandId})
-    {
-    var quantity = req.body.quantity;
-    var available=avail(quantity);
-    function avail(q){
-        if(q>0){
-            return true;
+//console.log(req.merchant);
+await Merchant.findById(req.merchant).then(async(data)=>{
+   if(data) {
+//console.log(data)
+ var merchantId=data._id;
+    await Brand.findOne({categoryId:categoryId,_id:brandId}).then(()=>{
+        var quantity = req.body.quantity;
+        var available=avail(quantity);
+        function avail(q){
+            if(q>0){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
-        else{
-            return false;
-        }
-    }
-    const val = new Product({
-        merchantId:merchantId,
-        productName: req.body.productName,
-        baseCost: req.body.baseCost,
-        shortDescription: req.body.shortDescription,
-        longDescription: req.body.longDescription,
-
-        discount: req.body.discount,
-        discountedCost:(req.body.baseCost-(req.body.discount*req.body.baseCost/100)),
-       
-       size: req.body.size,
-       categoryId: categoryId,
-       brandId:brandId,
+        const val = new Product({
+            merchantId:merchantId,
+            productName: req.body.productName,
+            baseCost: req.body.baseCost,
+            shortDescription: req.body.shortDescription,
+            longDescription: req.body.longDescription,
     
-    
-        quantity: req.body.quantity,
-        available:available
+            discount: req.body.discount,
+            discountedCost:(req.body.baseCost-(req.body.discount*req.body.baseCost/100)),
+           
+           size: req.body.size,
+           categoryId: categoryId,
+           brandId:brandId,
         
-
-
-    })
-    val.save()
-        .then(result => {
+        
+            quantity: req.body.quantity,
+            available:available
             
-            res.status(200).json({ 
+    
+    
+        })
+        val.save()
+            .then(result => {
                 
-                status:'true',
-                error:{},
-                    Response:result
-                 })
-            
-        })
-        .catch(err => {
-            res.status(500).json({
-                status:"false",
-                response:"null",
-                error: err.message,
-                //val:error.message
-
+                res.status(200).json({ 
+                    
+                    status:'true',
+                    error:{},
+                        Response:result
+                     })
+                
             })
-        })
+            .catch(err => {
+                res.status(500).json({
+                    status:"false",
+                    response:"null",
+                    error: err.message,
+                    //val:error.message
+    
+                })
+            })
+    })
 
-    }
 }
+})
 }
+
 catch(error)
 {
 res.json(error.message)

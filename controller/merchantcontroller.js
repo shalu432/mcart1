@@ -36,7 +36,7 @@ const addMerchant = async (req, res) => {
                 .then(result => {
                     res.status(200).json({
                         status:true,
-                    
+                    error:{},
                         response: result
 
 
@@ -44,7 +44,9 @@ const addMerchant = async (req, res) => {
                 })
                 .catch(err => {
                     res.status(500).json({
-                        error: err
+                        status:"true",
+                        response:"null",
+                        error: err.message
                     })
                 })
 
@@ -81,8 +83,8 @@ const loginMerchant = (req, res) => {
                     if (result) {
                         const token = jwt.sign({
                            
-                            email: data[0].email,
-                           
+                            //email: data[0].email,
+                           id:data[0]._id
 
                         },
                             privateKey,
@@ -96,6 +98,7 @@ const loginMerchant = (req, res) => {
                             error:{},
                            message:"successfully authorized",
                             Email: data[0].Email,
+                            
 
                             token: token
 
@@ -124,7 +127,7 @@ const getMerchant = async (req, res) => {
         res.send({
             error:{
                 status:false,
-                error:err
+                error:err.message
             }
         })
     }
