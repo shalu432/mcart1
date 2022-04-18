@@ -22,7 +22,7 @@ const CustomerSchema = new mongoose.Schema({
     Gender: {
         type: String,
         enum:["male","female","others"],
-      require: true
+      required:true
     },
     DOB: {
         type:Date,
@@ -78,10 +78,6 @@ brandId:[{
     ref:"Brand"
         
 }]
-//  cardItems:[{
-// type:mongoose.SchemaTypes.ObjectId,
-// ref:'Cart'
-//  }]
 
 })
    

@@ -8,7 +8,7 @@ ref:"Customer"
     email:
    {
        type:String,
-       require:true
+       required:true
    },
     cardnumber:
     {
@@ -27,23 +27,26 @@ ref:"Customer"
         type: String,
         uppercase:true,
         match:[/^[A-Za-z]+$/,'Please fill a valid firstName'],
-        require: true
+        required: true
     },
     cardname:
     {
         type:String,
-        enum:["mastercard","visa"]
+        enum:["mastercard","visa"],
+        required:true
     },
 
     cvv:
     {
         type: Number,
+        required:true
 
     },
     expdate:
     {
         type: Date,
-        min: Date.now
+        min: Date.now,
+        required:true
     },
     paymentId: {
         type: String

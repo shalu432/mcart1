@@ -4,21 +4,37 @@ const Product = require('../model/productschema')
 const Merchant = require('../model/merchantschema')
 const Category= require('../model/Categoryschema')
 const Brand = require('../model/brandschema')
-//product
+
 const getAllProduct = async (req, res) => {
     try {
         const val = await Product.find()
-        res.json(val)
+        res.json({
+            status:"true",
+            code:"200",
+            response:val
+        })
     } catch (err) {
-        res.send('Error ' + err)
+        res.send({
+            status:"false",
+            response:"null",
+            error:err.message
+        })
     }
 }
 const getProductBYId = async (req, res) => {
     try {
         const val = await Product.findById(req.params.id)
-        res.json(val)
+        res.json({
+            status:"true",
+            code:"200",
+            response:val
+        })
     } catch (err) {
-        res.send('Error ' + err)
+        res.send({
+            status:"false",
+            response:"null",
+            error:err.message
+        })
     }
 }
 
@@ -39,8 +55,8 @@ const productRecord = (req, res, next) => {
             // page number
             // no of records
 
-            const currentPage = req.query.currentPage;//2
-           const pageSize = req.query.pageSize; //10
+            const currentPage = req.query.currentPage;
+           const pageSize = req.query.pageSize; 
 
            const skip = pageSize * (currentPage-1);
             const limit = pageSize;
@@ -75,7 +91,12 @@ const productRecord = (req, res, next) => {
             })
         }
     }catch(error) {
-        console.log('Error::', error);
+       // console.log('Error::', error);
+       res.json({
+           status:"false",
+           response:"null",
+           error:err.message
+       })
     }
 }
 
@@ -135,9 +156,9 @@ await Merchant.findOne({merchantId:merchantId})
         })
         .catch(err => {
             res.status(500).json({
-                status:"true",
+                status:"false",
                 response:"null",
-                error: err,
+                error: err.message,
                 //val:error.message
 
             })
@@ -174,9 +195,9 @@ const  addCategory = async(req,res)=>
     })
     .catch(err => {
         res.status(500).json({
-            status:"true",
+            status:"false",
             response:"null",
-            error: err
+            error: err.message
         })
     })
 
@@ -209,14 +230,14 @@ await Product.findByIdAndUpdate({ _id: req.params.id }, {
                 message:"updated successfully",
                 response:data,
               })
-           // res.status(200).json(result)
+           
         }).catch((err) => {
-           // console.log(err)
+           
             res.json({
                 status:"true",
-              //  code:200,
+                response:"null",
             error:{
-                error:404
+                error:err.message
             }
                 
               })
@@ -227,9 +248,17 @@ await Product.findByIdAndUpdate({ _id: req.params.id }, {
 const deleteProductbyMerchant = async (req, res) => {
     try {
         const val = await Product.findByIdAndDelete(req.params.id)
-        res.json(val)
+        res.json({
+            status:"true",
+            message:"successfully deleted",
+            response:val
+
+        })
     } catch (err) {
-        res.send('Error')
+        res.send({
+            response:"null",
+            error:err.message
+        })
     }
 }
 module.exports = {

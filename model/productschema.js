@@ -14,7 +14,8 @@ const ProductSchema = new mongoose.Schema({
         required:true
     },
     discount:{
-        type:Number
+        type:Number,
+        required:true
     },
     discountedCost:{
         type:Number,
@@ -25,13 +26,13 @@ const ProductSchema = new mongoose.Schema({
         type:String,
         minlength:5,
         maxlength:50,
-        require:true
+        required:true
     },
     longDescription:{
         type:String,
        minlength:10,
         maxlength:100,
-        require:true
+        required:true
     },
     quantity:{
         type:Number,
@@ -43,7 +44,8 @@ const ProductSchema = new mongoose.Schema({
     size:{
         type:String,
         uppercase:true,
-        enum:['S','M','L','XL','XXL']
+        enum:['S','M','L','XL','XXL'],
+        required:true
     },
    
    categoryId:{

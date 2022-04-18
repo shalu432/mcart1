@@ -11,14 +11,16 @@ const getAdmin = async(req,res)=>
         const ord = await Admin.find()
         res.json({
          status:true,
+         code:"200",
           response:ord
         })
-     //  res.json(ord)
+     
  }catch(err){
      res.send({
        error:{
          message:"error",
-         response: null
+         response: null,
+         error:err.message
        }
      })
  }
@@ -55,6 +57,8 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
                  })
                  .catch(err=>{
                      res.status(500).json({
+                         status:"false",
+                         response:"null",
                          error:err.message
                      })
                  })
@@ -108,6 +112,8 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
             .catch(err=>
                 {
                     res.status(500).json({
+                        status:"false",
+                        response:"null",
                         err:err.message
                     })
 
@@ -150,6 +156,7 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
                     }).catch(err=>{
                         res.json({
                             status:"false",
+                            response:"null",
                             error:err.message,
                             
                     })

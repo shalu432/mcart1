@@ -32,7 +32,8 @@ const AdminSchema = new mongoose.Schema({
     },
      role:{
         type:String,
-        enum:["ceo","manager","chairman","director"]
+        enum:["ceo","manager","chairman","director"],
+        required:true
      },
      isActive:{
          type:Boolean,

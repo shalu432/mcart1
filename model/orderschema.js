@@ -16,7 +16,7 @@ const OrderSchema = new mongoose.Schema({
   },
         items: {
           type:Array,
-          require:true
+          required:true
         },
         
         totalCost:
