@@ -75,7 +75,7 @@ const updatePayment=async (req,res) => {
    var expdate = req.body.expdate
     const key = req.params.key
     var flag = await Payment.findOne({paymentId:req.query.key})
-    await Payment.findByIdAndUpdate(flag._id,{$set:{cardnumber,cardholdername,cardname,cvv,expdate}},{new:true})
+    await Payment.findByIdAndUpdate(flag._id,{$set:{cardnumber,cardholdername,cardname,cvv,expdate}},{new:true,runValidators:true})
     .then((data)=>
     {
         res.json({

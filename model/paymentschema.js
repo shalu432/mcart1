@@ -13,8 +13,7 @@ ref:"Customer"
     cardnumber:
     {
         type: Number,
-
-        minlength:16,
+         minlength:16,
         maxlength:16,
         unique:true,
         required: true,
@@ -40,7 +39,7 @@ ref:"Customer"
     cvv:
     {
         type: Number,
-        
+
         required:true
 
     },
