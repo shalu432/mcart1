@@ -160,7 +160,7 @@ const updateMerchant = async (req, res) => {
                             phoneNumber: req.body.phoneNumber,
                             Email: req.body.Email,
                             countryCode: req.body.countryCode,
-                            address: req.body.address,
+                            //address: req.body.address,
                             createdAt: req.body.createdAt,
                             password: hash
                         }

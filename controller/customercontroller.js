@@ -389,8 +389,8 @@ try{
       message:"address_updated_succesfully"
     }))
     .catch((err) => res.status(201).json({status:"false",
-    respone:"null",
-    code:"500",
+   // respone:"null",
+   // code:"500",
     errors:{
         error_code:"failed_to_update",
         error_msg:err
@@ -401,7 +401,7 @@ try{
   }else{
     res.status(500).json({status:"false",
     respone:"null",
-    code:"500",
+    //code:"500",
     errors:{
         error_code:"Authorization_failed",
         error_msg:"something_went_wrong"
@@ -411,7 +411,9 @@ try{
   }
 }catch(error)
 {
-    res.json(error)
+    res.json({
+        error:err.message
+    })
 }
 }
 
