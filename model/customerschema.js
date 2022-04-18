@@ -73,9 +73,9 @@ const CustomerSchema = new mongoose.Schema({
             
      }],
   
-product:[{
-    type:mongoose.SchemaTypes.ObjectId,
-    ref:"Product"
+brandId:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Brand"
         
 }]
 //  cardItems:[{

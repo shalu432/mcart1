@@ -43,9 +43,7 @@ const getProductByCustomer= async(req,res) => {
        
             if(req.query.keyword){
                 query.$or=[
-                   
-                    { "categoryName" : { $regex: req.query.keyword, $options: 'i' }},
-                    { "brandName" : { $regex: req.query.keyword, $options: 'i' }},
+                 
                     { "productName" : { $regex: req.query.keyword, $options: 'i' }},
                     { "shortDescription" : { $regex: req.query.keyword, $options: 'i' }},
                     { "longDescription" : { $regex: req.query.keyword, $options: 'i' }}
@@ -53,7 +51,7 @@ const getProductByCustomer= async(req,res) => {
             }
             Product.find(query).skip(skip).limit(limit).sort({[req.query.key]:req.query.value})
        // await Product.find()
-        .select({"productName":1,"baseCost":1,"longDescription":1,"shortDescription":1,"discountedCost":1,"_id":0})
+        .select({"productName":1,"baseCost":1,"longDescription":1,"shortDescription":1,"discountedCost":1,"_id":0}).populate("brandId")
         
         .then((data)=>
            { res.json({

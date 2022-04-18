@@ -49,8 +49,8 @@ const productRecord = (req, res, next) => {
             if(req.query.keyword){
                 query.$or=[
                    
-                    { "categoryName" : { $regex: req.query.keyword, $options: 'i' }},
-                    { "brandName" : { $regex: req.query.keyword, $options: 'i' }},
+                    //{ "categoryName" : { $regex: req.query.keyword, $options: 'i' }},
+                   // { "brandName" : { $regex: req.query.keyword, $options: 'i' }},
                     { "productName" : { $regex: req.query.keyword, $options: 'i' }},
                     { "shortDescription" : { $regex: req.query.keyword, $options: 'i' }},
                     { "longDescription" : { $regex: req.query.keyword, $options: 'i' }}
