@@ -146,7 +146,7 @@ const updateMerchant = async (req, res) => {
                 pass = hash;
                 // console.log(pass)
 
-                var vali = await Merchant.updateOne({ _id: req.params.id },
+                await Merchant.updateOne({ _id: req.params.id },
                     {
                         $set: {
                             // name:req.body.name,
@@ -165,14 +165,16 @@ const updateMerchant = async (req, res) => {
                             password: hash
                         }
 
+                    }).then((data)=>{
+                        res.json({
+                            status:"true",
+                            code:200,
+                            message:"updated successfully",
+                            response:data,
+                           
+                        })
                     })
-                res.json({
-                    status:"true",
-                    code:200,
-                    message:"updated successfully",
-                    response:vali,
-                   
-                })
+                
             }
         })
     })
