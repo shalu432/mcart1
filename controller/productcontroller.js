@@ -100,6 +100,37 @@ const productRecord = (req, res, next) => {
     }
 }
 
+const searchingRecord= (req,res)=>
+{
+    let query={};
+    if(req.query.keyword){
+        query.$or=[
+           
+            //{ "categoryName" : { $regex: req.query.keyword, $options: 'i' }},
+           // { "brandName" : { $regex: req.query.keyword, $options: 'i' }},
+            { "productName" : { $regex: req.query.keyword, $options: 'i' }},
+            { "shortDescription" : { $regex: req.query.keyword, $options: 'i' }},
+            { "longDescription" : { $regex: req.query.keyword, $options: 'i' }}
+        ];
+        Product.find({}).exec((err, docs) =>{
+            if(err) {
+                responseObj = {
+                    "status": "error",
+                    "msg": "Input is missing.",
+                    "body": {}
+                }
+                res.status(500).send(responseObj);
+            }else{
+                responseObj = {
+                    "status": "true",
+                    "msg": "Record found.",
+                    "body": docs
+                }
+                res.status(200).send(responseObj);
+            }
+        })
+    }
+    }
 
 
 
@@ -130,16 +161,12 @@ await Merchant.findById(req.merchant).then(async(data)=>{
             baseCost: req.body.baseCost,
             shortDescription: req.body.shortDescription,
             longDescription: req.body.longDescription,
-    
             discount: req.body.discount,
             discountedCost:(req.body.baseCost-(req.body.discount*req.body.baseCost/100)),
-           
            size: req.body.size,
            categoryId: categoryId,
            brandId:brandId,
-        
-        
-            quantity: req.body.quantity,
+           quantity: req.body.quantity,
             available:available
             
     
@@ -272,7 +299,8 @@ module.exports = {
     updateProductbyMerchant,
     deleteProductbyMerchant,
    productRecord ,
-   addCategory
+   addCategory,
+   searchingRecord
   
    
    
