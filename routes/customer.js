@@ -7,13 +7,11 @@ const otp =require('../model/otpmodel');
 const cust= require('../controller/customercontroller')
 router.post('/login',cust.loginUser)
 router.get('/getcustomer',cust. getCustomer)
-router.get('/getproduct',middCustomer.JWT,cust.getProductByCustomer)
 
-router.post('/addCustomer',cust.addCustomer)
-//router.post('/addAddress',cust.addAddress)
+router.post('/addCustomer',middCustomer.JWT,cust.addCustomer)
 router.post('/verifyOtp',cust.verifyOtp)
-router.put('/updateCustomer/:id',middCustomer.JWT,cust.updateCustomer)
+router.put('/updateCustomer',middCustomer.JWT,cust.updateCustomer)
 router.put('/updateAddress',middCustomer.JWT,cust.updateAddress)
-router.delete('/deleteCustomer/:id',middCustomer.JWT,cust.deleteCustomer)
+router.delete('/deleteCustomer',middCustomer.JWT,cust.deleteCustomer)
 
 module.exports = router;

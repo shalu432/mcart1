@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const Admin = require('../model/adminschema')
 //var bodyParser = require('body-parser')
-const midd  =require ("../middleware/middleware2")
 
 
 
@@ -12,6 +11,7 @@ const midd  =require ("../middleware/middleware2")
  router.post('/loginAdmin',adm.loginAdmin)
  router.put('/updateAdmin/:id',adm.updateAdmin)
  router.delete('/deleteAdmin/:id',adm.deleteAdmin)
+ 
 
 
 module.exports = router;

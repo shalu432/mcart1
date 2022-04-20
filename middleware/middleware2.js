@@ -13,6 +13,7 @@ var adminJWT = (req,res,next)=>{
             res.send({message:"invalid token"})
         }
         else{
+             req.admin=decoded.id
             next();
         }
     }) 

@@ -5,11 +5,11 @@ const PaymentSchema = new mongoose.Schema({
 type:mongoose.Schema.Types.ObjectId,
 ref:"Customer"
   },
-    email:
-   {
-       type:String,
-       required:true
-   },
+//     email:
+//    {
+//        type:String,
+//        required:true
+//    },
     cardnumber:
     {
         type: Number,

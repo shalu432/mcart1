@@ -14,7 +14,9 @@ var JWT = (req,res,next)=>{
             res.send({message:"invalid token"})
         }
         else{
-           // req.customer=decoded.id
+          
+            req.customer=decoded.phoneNumber
+            
             next();
         }
     }) 

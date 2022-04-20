@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Address = require('../model/addressschema')
-const Product = require('../model/productschema')
 const CustomerSchema = new mongoose.Schema({
 
     
@@ -72,13 +71,6 @@ const CustomerSchema = new mongoose.Schema({
         ref:"Addresses"
             
      }],
-  
-brandId:[{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"Brand"
-        
-}]
-
 })
    
 module.exports = mongoose.model('Customer', CustomerSchema)

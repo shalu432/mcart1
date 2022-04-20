@@ -4,11 +4,11 @@ const Merchant = require('../model/merchantschema')
 var bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-//const { updateOne } = require('../model/merchantschema')
+const Product = require('../model/productschema')
+
 
 
 const addMerchant = async (req, res) => {
-    //var salt = bcrypt.genSaltSync(10);
     bcrypt.hash(req.body.password, 10, (err, hash) => {
         if (err) {
             return res.status(500).json({
@@ -17,8 +17,7 @@ const addMerchant = async (req, res) => {
         }
         else {
             const data = new Merchant({
-                //  name :req.body.name,
-                //data
+                
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
 
@@ -27,9 +26,14 @@ const addMerchant = async (req, res) => {
                 phoneNumber: req.body.phoneNumber,
                 Email: req.body.Email,
                 countryCode: req.body.countryCode,
-                address: req.body.address,
-
-                createdAt: req.body.createdAt,
+               address: {
+                   houseNumber:req.body.address.houseNumber,
+                   street:req.body.address.street,
+                   Locality:req.body.address.Locality,
+                   city:req.body.address.city,
+                   state:req.body.address.state,
+                   pincode:req.body.address.pincode
+               },
                 password: hash
             })
             data.save()
@@ -42,11 +46,11 @@ const addMerchant = async (req, res) => {
 
                     })
                 })
-                .catch(err => {
+                .catch(error => {
                     res.status(500).json({
-                        status:"true",
+                        status:"false",
                         response:"null",
-                        error: err.message
+                        error: error.message
                     })
                 })
 
@@ -133,8 +137,12 @@ const getMerchant = async (req, res) => {
     }
 
 }
-const updateMerchant = async (req, res) => {
 
+
+
+
+const updateMerchant = async (req, res) => {
+//console.log(req.merchant)
     var pass;
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(req.body.password, 10, async function (err, hash) {
@@ -146,7 +154,7 @@ const updateMerchant = async (req, res) => {
                 pass = hash;
                 // console.log(pass)
 
-                await Merchant.findByIdAndUpdate({ _id: req.params.id },
+                await Merchant.findOneAndUpdate({_id:req.merchant},
                     {
                         $set: {
                             // name:req.body.name,
@@ -173,6 +181,65 @@ const updateMerchant = async (req, res) => {
                             response:data,
                            
                         })
+                    }).catch(error=>{
+                        res.json({
+                           status:"false",
+                            response:"null",
+                            error:error.message
+                        })
+                    })
+                
+            }
+        })
+    })
+}
+
+const updateMerchantByAdmin = async (req, res) => {
+
+    var pass;
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(req.body.password, 10, async function (err, hash) {
+            if (err) {
+                return res.status(500).json({
+                    error: err
+                })
+            } else {
+                pass = hash;
+                // console.log(pass)
+
+                await Merchant.findByIdAndUpdate({_id:req.params.id},
+                    {
+                        $set: {
+                            // name:req.body.name,
+                            // password:pass
+
+                            firstName: req.body.firstName,
+                            lastName: req.body.lastName,
+
+                            Gender: req.body.Gender,
+                            DOB: req.body.DOB,
+                            phoneNumber: req.body.phoneNumber,
+                            Email: req.body.Email,
+                            countryCode: req.body.countryCode,
+                            //address: req.body.address,
+                            createdAt: req.body.createdAt,
+                            password: hash
+                        }
+
+                    },{new:true,runValidators:true}).then((data)=>{
+                        res.json({
+                            status:"true",
+                            code:200,
+                            message:"updated successfully",
+                            response:data,
+                           
+                        })
+                    }).catch(error=>{
+                        res.json({
+                           status:"false",
+                            response:"null",
+                            error:error.message
+                        })
                     })
                 
             }
@@ -180,6 +247,22 @@ const updateMerchant = async (req, res) => {
     })
 }
 const deleteMerchant = async (req, res) => {
+    try {
+        const val = await Merchant.findOneAndDelete(req.merchant)
+      //  res.json(val)
+      res.json({
+        status:true,
+        error:{},
+        message:"merchant deleted successfully",
+        response:val
+    })
+    } catch (err) {
+        res.send({
+            error:err.message
+        })
+    }
+}
+const deleteMerchantByAdmin = async (req, res) => {
     try {
         const val = await Merchant.findByIdAndDelete(req.params.id)
       //  res.json(val)
@@ -200,5 +283,7 @@ module.exports = {
     loginMerchant,
     getMerchant,
     updateMerchant,
-    deleteMerchant
+    deleteMerchant,
+   deleteMerchantByAdmin,
+    updateMerchantByAdmin
 }

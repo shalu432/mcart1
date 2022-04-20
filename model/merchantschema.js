@@ -59,44 +59,39 @@ const MerchantSchema = new mongoose.Schema({
 
 
     address:
-    [
         {
-             type:
-            {
-                type:String,
-                required:true
-            },
+           
         
             houseNumber:{
                 type:String,
-               // required:true
+                required:true
             },
            
-            Street : {
+            street : {
              type:String,
-             //required:true
+             required:true
             },
             Locality : {
                 type:String,
-               // required:true
+               required:true
             },
             city:{
                 type:String,
-               // required:true
+                required:true
             },
             state:{
                 type:String,
-                //required:true
+                required:true
             },
             pincode:{
                 type :Number,
                 minlength:6,
                 maxlength:6,
-                //required:true
+                required:true
             }
            
         }
-        ],
+        ,
 
         createdAt: {
             type: Date,

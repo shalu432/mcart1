@@ -21,6 +21,39 @@ const getAllProduct = async (req, res) => {
         })
     }
 }
+const getProductByMerchant = async (req, res) => {
+    try {
+      
+         await Product.find({merchantId:req.merchant})
+         .populate([
+             {path:"categoryId",select:"categoryName"},
+             {path:"brandId",select:"brandName"},
+             {path:"merchantId",select:"firstName lastName"}
+
+            ]).then((data)=>
+        {
+            res.json({
+                status:true,
+                error:{},
+                response:data
+            })
+        })
+       
+    } catch (err) {
+        res.send({
+            error:{
+                status:false,
+                error:err.message
+            }
+        })
+    }
+
+}
+
+
+
+
+
 const getProductBYId = async (req, res) => {
     try {
         const val = await Product.findById(req.params.id)
@@ -43,36 +76,14 @@ const getProductBYId = async (req, res) => {
 
 const productRecord = (req, res, next) => {
     try{
-        if(!req.body) {
-            responseObj = {
-                "status": "error",
-                "msg": "Input is missing.",
-                "body": {}
-            }
-            res.status(500).send(responseObj);
-        }else{
-            //pagination
-            // page number
-            // no of records
 
             const currentPage = req.query.currentPage;
            const pageSize = req.query.pageSize; 
 
            const skip = pageSize * (currentPage-1);
             const limit = pageSize;
-            let query={};
-       
-            if(req.query.keyword){
-                query.$or=[
-                   
-                    //{ "categoryName" : { $regex: req.query.keyword, $options: 'i' }},
-                   // { "brandName" : { $regex: req.query.keyword, $options: 'i' }},
-                    { "productName" : { $regex: req.query.keyword, $options: 'i' }},
-                    { "shortDescription" : { $regex: req.query.keyword, $options: 'i' }},
-                    { "longDescription" : { $regex: req.query.keyword, $options: 'i' }}
-                ];
-            }
-            Product.find(query).skip(skip).limit(limit).sort({[req.query.key]:req.query.value}).exec((err, docs) =>{
+            
+            Product.find().skip(skip).limit(limit).sort({[req.query.key]:req.query.value}).exec((err, docs) =>{
                 if(err) {
                     responseObj = {
                         "status": "error",
@@ -89,34 +100,69 @@ const productRecord = (req, res, next) => {
                     res.status(200).send(responseObj);
                 }
             })
-        }
+        
     }catch(error) {
        // console.log('Error::', error);
        res.json({
            status:"false",
            response:"null",
-           error:err.message
+           error:error.message
        })
     }
 }
 
-const searchingRecord= (req,res)=>
-{
-    let query={};
-    if(req.query.keyword){
-        query.$or=[
-           
-            //{ "categoryName" : { $regex: req.query.keyword, $options: 'i' }},
-           // { "brandName" : { $regex: req.query.keyword, $options: 'i' }},
-            { "productName" : { $regex: req.query.keyword, $options: 'i' }},
-            { "shortDescription" : { $regex: req.query.keyword, $options: 'i' }},
-            { "longDescription" : { $regex: req.query.keyword, $options: 'i' }}
-        ];
-        Product.find({}).exec((err, docs) =>{
-            if(err) {
+const searchingRecord= async(req,res)=>
+ {
+   var pageSize=1;
+
+    pageSize = Number(req.query.pageSize); 
+
+   const skip = Number(req.query.skip);
+    //const limit = pageSize;
+    
+        let value = await Product.aggregate([
+            {
+                $lookup:
+                  {
+                    from:"categories",
+                    localField:"categoryId",
+                    foreignField:"_id",
+                    as:"Category"
+                  }
+             },
+             {$unwind:"$Category"},
+             {
+                $lookup:
+                {
+                  from:"brands",
+                  localField:"brandId",
+                  foreignField:"_id",
+                  as:"Brand"
+                }
+             },
+             {$unwind:"$Brand"},
+             {
+                $match:{
+                $or :[
+               
+                          
+                            { productName : { $regex: req.query.keyword, $options: 'i' }},
+                            { "Category.categoryName" : { $regex: req.query.keyword, $options: 'i' }},
+                            { "Brand.brandName" : { $regex: req.query.keyword, $options: 'i' }},
+                            { shortDescription : { $regex: req.query.keyword, $options: 'i' }},
+                            { longDescription : { $regex: req.query.keyword, $options: 'i' }}
+                        ]}
+                    },
+                {
+                    $limit:pageSize
+                },
+                {   $skip:skip    }
+            ])
+               
+            if(value.length==0) {
                 responseObj = {
                     "status": "error",
-                    "msg": "Input is missing.",
+                    "msg": "no matched product",
                     "body": {}
                 }
                 res.status(500).send(responseObj);
@@ -124,13 +170,13 @@ const searchingRecord= (req,res)=>
                 responseObj = {
                     "status": "true",
                     "msg": "Record found.",
-                    "body": docs
+                    "body": value
                 }
                 res.status(200).send(responseObj);
             }
-        })
+        
     }
-    }
+
 
 
 
@@ -139,63 +185,72 @@ const addProductbyMerchant = async (req, res) => {
 //var merchantId=req.query.merchantId
 var categoryId=req.query.categoryId
 var brandId=req.query.brandId
-//console.log(req.merchant);
-await Merchant.findById(req.merchant).then(async(data)=>{
-   if(data) {
-//console.log(data)
- var merchantId=data._id;
-    await Brand.findOne({categoryId:categoryId,_id:brandId}).then(()=>{
-        var quantity = req.body.quantity;
-        var available=avail(quantity);
-        function avail(q){
-            if(q>0){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-        const val = new Product({
-            merchantId:merchantId,
-            productName: req.body.productName,
-            baseCost: req.body.baseCost,
-            shortDescription: req.body.shortDescription,
-            longDescription: req.body.longDescription,
-            discount: req.body.discount,
-            discountedCost:(req.body.baseCost-(req.body.discount*req.body.baseCost/100)),
-           size: req.body.size,
-           categoryId: categoryId,
-           brandId:brandId,
-           quantity: req.body.quantity,
-            available:available
-            
-    
-    
-        })
-        val.save()
-            .then(result => {
-                
-                res.status(200).json({ 
-                    
-                    status:'true',
-                    error:{},
-                        Response:result
+await Product.findOne({productName:req.body.productName}).then(async(result)=>{
+if(!result)
+{
+    await Merchant.findById(req.merchant).then(async(data)=>{
+        if(data) {
+      var merchantId=data._id;
+         await Brand.findOne({categoryId:categoryId,_id:brandId}).then(()=>{
+             var quantity = req.body.quantity;
+             var available=avail(quantity);
+             function avail(q){
+                 if(q>0){
+                     return true;
+                 }
+                 else{
+                     return false;
+                 }
+             }
+             const val = new Product({
+                 merchantId:merchantId,
+                 productName: req.body.productName,
+                 baseCost: req.body.baseCost,
+                 shortDescription: req.body.shortDescription,
+                 longDescription: req.body.longDescription,
+                 discount: req.body.discount,
+                 discountedCost:(req.body.baseCost-(req.body.discount*req.body.baseCost/100)),
+                size: req.body.size,
+                categoryId: categoryId,
+                brandId:brandId,
+                quantity: req.body.quantity,
+                 available:available
+                 
+         
+         
+             })
+             val.save()
+                 .then(result => {
+                     
+                     res.status(200).json({ 
+                         
+                         status:'true',
+                         error:{},
+                             Response:result
+                          })
+                     
+                 })
+                 .catch(err => {
+                     res.status(500).json({
+                         status:"false",
+                         response:"null",
+                         error: err.message,
+                         //val:error.message
+         
                      })
-                
-            })
-            .catch(err => {
-                res.status(500).json({
-                    status:"false",
-                    response:"null",
-                    error: err.message,
-                    //val:error.message
-    
-                })
-            })
+                 })
+         })
+     
+     }
+     })
+}else{
+    res.json({
+        status:"false",
+        message:"product already exist"
     })
-
 }
 })
+
 }
 
 catch(error)
@@ -300,7 +355,8 @@ module.exports = {
     deleteProductbyMerchant,
    productRecord ,
    addCategory,
-   searchingRecord
+   searchingRecord,
+   getProductByMerchant
   
    
    

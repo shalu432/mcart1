@@ -7,16 +7,13 @@ const otpGenerator = require('otp-generator');
 const bcrypt = require("bcrypt");
 const Otp  = require('../model/otpmodel');
 const jwt = require('jsonwebtoken');
-const Product = require('../model/productschema')
-
-//const { findOne } = require('../model/customerschema');
-//const { updateOne } = require('../model/customerschema')
+//const Product = require('../model/productschema')
 const Address = require('../model/addressschema');
-//const { status } = require('express/lib/response');
+
 
 const getCustomer= async(req,res) => {
     try{
-           const cus = await Customer.find()
+           const cus = await Customer.find(req.customer)
            res.json({
                status:200,
                response:cus
@@ -32,44 +29,7 @@ const getCustomer= async(req,res) => {
     }
 }
 
-const getProductByCustomer= async(req,res) => {
-    try{
-        const currentPage = req.query.currentPage;//2
-           const pageSize = req.query.pageSize; //10
 
-           const skip = pageSize * (currentPage-1);
-            const limit = pageSize;
-            let query={};
-       
-            if(req.query.keyword){
-                query.$or=[
-                 
-                    { "productName" : { $regex: req.query.keyword, $options: 'i' }},
-                    { "shortDescription" : { $regex: req.query.keyword, $options: 'i' }},
-                    { "longDescription" : { $regex: req.query.keyword, $options: 'i' }}
-                ];
-            }
-            Product.find(query).skip(skip).limit(limit).sort({[req.query.key]:req.query.value})
-       // await Product.find()
-        .select({"productName":1,"baseCost":1,"longDescription":1,"shortDescription":1,"discountedCost":1,"_id":0}).populate("brandId")
-        
-        .then((data)=>
-           { res.json({
-            status:200,
-            response:data
-        })})
-           
-          
-    }catch(error){
-        res.send({
-            error:
-            {
-                message :"null",
-                error:error
-            }
-        })
-    }
-}
 
 
 
@@ -194,7 +154,7 @@ response:"otp sent successfully",
     .catch(err=>
         {
             res.status(404).json({
-                error:err
+                error:err.message
             })
         })
 }
@@ -243,6 +203,8 @@ const verifyOtp= async(req,res)=>
                         const token =jwt.sign({
                             //name:data[0].name,
                             phoneNumber:data[0].phoneNumber,
+        
+
                         },
                         privateKey,
                         {
@@ -299,11 +261,10 @@ const verifyOtp= async(req,res)=>
 
  
  const updateCustomer = async(req,res)=> {
-
 try{
-        const cus = await Customer.findByIdAndUpdate({_id:req.params.id},{
+         await Customer.findOneAndUpdate({phoneNumber:req.customer},
+            {
        $set:{
-        
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                  Gender: req.body.Gender,
@@ -311,30 +272,24 @@ try{
                 phoneNumber: req.body.phoneNumber,
                 email: req.body.email,
                 countryCode: req.body.countryCode,
-                //address: req.body.address,
+            
                  
-        }
-     },{new:true,runValidators:true})
-     
-     // const a1 = await cus.save()
-        
-        //     res.status(200).json({
-        //         message : "successfully Updated",
-        //         response:a1
-        // })   
-   
-  .then((data)=>{
-
-      res.json({
-          message : "successfully Updated",
-          response:data
-      })
-  }).catch((err)=>{
-    // console.log(err) 
+           }
+        },{new:true,runValidators:true}).then((result)=>{
+           // console.log("----+==============>>>>>>>>>>>>>>>>>>>.",result)
+            res.json({
+                status:"true",
+                code:200,
+                message:"updated successfully",
+                response:result,
+               
+            })
+  
+  }).catch((err)=>{ 
      res.send({
          error_code:500,
          message:"null",
-         response:err
+         response:err.message
 
      })
   })
@@ -420,7 +375,7 @@ try{
 
 const deleteCustomer = async(req,res)=> {
     try{
-        const cus = await Customer.findByIdAndDelete(req.params.id) 
+        const cus = await Customer.findOneAndDelete(req.customer) 
         res.json({
             status : 200,
             message:"successfully deleted",
@@ -444,7 +399,7 @@ module.exports={
     loginUser,
     verifyOtp,
     updateAddress,
-    getProductByCustomer
+    
 }
    
    

@@ -197,6 +197,9 @@ bcrypt.hash(req.body.password,10,(err,hash)=>
         }
     }
 
+
+    
+
 module.exports = {
     getAdmin,
     addAdmin,

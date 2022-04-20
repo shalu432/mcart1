@@ -15,7 +15,7 @@ await Payment.findOne({customerId: customerId})
     if(req.body.cardnumber && req.body.cardname && req.body.cardholdername && req.body.cvv && req.body.expdate && (req.body.cardnumber.toString().length)>=16 && (req.body.cardnumber.toString().length)<=16 && req.body.cvv.toString().length>=3 && req.body.cvv.toString().length <=3)
    {
  
-   // var email= req.body.email
+   
     var cardnumber = req.body.cardnumber;
     var cardname = req.body.cardname;
     var cardholdername = req.body.cardholdername;
@@ -24,8 +24,9 @@ await Payment.findOne({customerId: customerId})
     var customerId=req.query.customerId
     
     var paymentId = key.randomBytes(6).toString('hex')
-   
-     var token =await Customer.find({customerId:customerId})
+    Payment.findOne({cardnumber:req.body.cardnumber}).then(async(result)=>{
+         if(!result){
+              var token =await Customer.find({customerId:customerId})
      if(token.length!=0){
      
         var data = {
@@ -51,11 +52,29 @@ await Payment.findOne({customerId: customerId})
     }))
     
  }else{res.send('customer  Not Found')}
+   }
+else{
+    res.json({
+        status:"false",
+        error:{},
+        message:"cardnumber is already exist"
+    })
 }
+
+})
+
+}
+
+
+
+
 
 else{
     res.json('Enter correct data');
 }}
+
+
+
 }
 catch(error){
 res.json({
@@ -68,20 +87,21 @@ res.json({
 
 const updatePayment=async (req,res) => {
     try{
-   var cardnumber = req.body.cardnumber;
- var cardholdername = req.body.cardholdername;
- var cardname=req.body.cardname;
-   var cvv = req.body.cvv;
-   var expdate = req.body.expdate
-    const key = req.params.key
-   // var flag = await Payment.findOne({paymentId:req.query.key})
-    await Payment.findByIdAndUpdate({paymentId:key},{$set:{cardnumber,cardholdername,cardname,cvv,expdate}},{new:true,runValidators:true})
-    .then((data)=>
+         if(req.body.cardnumber && req.body.cardname && req.body.cardholdername && req.body.cvv && req.body.expdate && (req.body.cardnumber.toString().length)>=16 && (req.body.cardnumber.toString().length)<=16 && req.body.cvv.toString().length>=3 && req.body.cvv.toString().length <=3)
+         {
+    await Payment.findOneAndUpdate({paymentId:req.params.key},{$set:{
+        cardnumber:req.body.cardnumber,
+        cardholdername:req.body.cardholdername,
+        cardname:req.body.cardname,
+        cvv:req.body.cvv,
+        expdate:req.body.expdate
+    }},{new:true})
+.then((result)=>
     {
         res.json({
             status:true,
             message : "successfully Updated",
-            response:data
+            response:result
         })
     })
     .catch(()=>
@@ -95,15 +115,18 @@ const updatePayment=async (req,res) => {
 
     })
         
-            
+}
+else{
+    res.json("enter valid data")
+}        
         
-    }catch(error){
+    }
+    catch(error){
         res.json({
             error:error.message
         })
     }
     
-   // console.log(value)
    
 }
 
