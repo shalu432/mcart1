@@ -104,7 +104,15 @@ const MerchantSchema = new mongoose.Schema({
         required : true,
 
 
-    }
+    },
+    isActive:{
+       type:Boolean,
+       default:true
+    },
+    blockedCustomer:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Customer"
+    }]
    
 });
 

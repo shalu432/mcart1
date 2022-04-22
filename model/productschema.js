@@ -58,13 +58,17 @@ const ProductSchema = new mongoose.Schema({
     ref:"Brand" 
    },
    
-     
-    
+   
         
     available: {
         type: Boolean,
         required: true,
      },
+     isActive:{
+        type:Boolean,
+        default:true
+     },
+        
      merchantId:{
          type: mongoose.Schema.Types.ObjectId,
          ref:"Merchant"

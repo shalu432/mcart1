@@ -27,7 +27,7 @@ const getAllOrder = async(req,res) => {
  }
  const getOrder = async(req,res) => {
   try{
-         const ord = await Order.findOne(req.query.id)
+         const ord = await Order.findById(req.params.id)
          res.json({
            status:true,
            response:ord
@@ -45,20 +45,22 @@ const getAllOrder = async(req,res) => {
  const addOrder = async(req,res)=>
  {
   try{
-  var customerId=req.query.customerId;
+  //var customerId=req.query.customerId;
   var addressId= req.query.addressId;
-  const cart = await Cart.findOne({ customerId: customerId})
-     await Cart.deleteOne({ customerId: customerId })
+  const cart = await Cart.findOne({ customerId:req.customer})
+     await Cart.deleteOne({ customerId:req.customer})
     .then(()=>{
        
            if(cart){
-             let status="pending"
+             let status="ordered"
+             let paymentStatus="pending"
             const orderdata={
-            customerId:customerId,
+            customerId:req.customer,
             addressId:addressId,
             items:cart.items,
             totalCost:cart.subTotal,
-            status:status
+            status:status,
+            paymentStatus:paymentStatus
          
             }
             const order=new Order(orderdata);
@@ -76,7 +78,7 @@ const getAllOrder = async(req,res) => {
               
                 state:false,
                 code:403,
-                message:"order not placed",
+                message:"add to cart",
                 
               
              });
@@ -89,19 +91,20 @@ const getAllOrder = async(req,res) => {
 const orderPayment = async(req,res)=>
 {
  // try{
-  var customerId =req.query.customerId;
+  //var customerId =req.query.customerId;
   var paymentId =req.query.paymentId;
   var orderId = req.query.orderId
   await Order.findOne({_id:orderId}).then(async(data)=>{
     if(data){
-      await Payment.find({ customerId: customerId,paymentId:paymentId}).then((pay)=>{
+      await Payment.findOne({ customerId:req.customer,paymentId:paymentId}).then(async(pay)=>{
         if(pay)
-        {
-          //let transId;
-        var transactionid = crypto.randomBytes(6).toString('hex');
-         //pay.transactionid=transactionid
-          let status='ordered';
-              data.status=status,
+        { var transactionid = crypto.randomBytes(6).toString('hex');
+     
+        let paymentStatus='payment successfully'
+       
+        if(data.paymentStatus=="pending"){
+
+              data.paymentStatus=paymentStatus,
              data.transactionId=transactionid
               data.save().then((data)=>{
                 res.send({
@@ -111,7 +114,13 @@ const orderPayment = async(req,res)=>
                   response:data
                 });
               })
-                }  
+          }
+            else{
+              res.json({
+                message:"payment already done"
+              })
+            }
+               }  
                  else{
                   res.json("error")
               }
@@ -125,7 +134,7 @@ const orderPayment = async(req,res)=>
               })
     }
     else{
-      res.json("Order not Placed")
+      res.json("order not found")
     }
   })
    
@@ -141,14 +150,14 @@ const orderPayment = async(req,res)=>
    
 try {
    
-  await Order.findOne({_id:orderId,status:"ordered"}).then((data)=>
+  await Order.findOne({_id:orderId,paymentStatus:"payment successfully"}).then((data)=>
   {
     if(data)
     {
       
     var doc = new Refund({
       customerId:data.customerId,
-      orderId:data,orderId,
+      orderId:data.orderId,
       refundAmount:data.totalCost,
       transactionId:data.transactionId
   
@@ -176,12 +185,12 @@ else{
   res.json({
     status:"false",
     error:{},
-    message:"payment incomplete"
+    message:"payment incompleted"
   })
 }
   })
  
- // console.log(order)
+ 
   
 }
 catch(error) {
@@ -233,7 +242,16 @@ catch(error) {
 //   }
 //   }
  
-   
+   const orderOfCustomer=async(req,res)=>{
+     await Customer.findOne({_id:req.query.id})
+     await Order.find({customerId:req.query.id}).then((data)=>{
+       res.json({
+         status:"true",
+         message:"order history",
+         response:data
+       })
+     })
+   }
  
 module.exports={
     getAllOrder,
@@ -241,6 +259,7 @@ module.exports={
     orderPayment,
     cancelOrder,
     getOrder,
+    orderOfCustomer
    // orderStatus,
     //deleteOrder
     

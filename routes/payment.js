@@ -7,7 +7,7 @@ const middCustomer = require ("../middleware/middleware1")
 
 const pay = require('../controller/cardcontroller')
 router.post('/addPayment',middCustomer.JWT,pay.addPayment)
-router.put('/updatePayment/:key',middCustomer.JWT,pay.updatePayment)
+router.put('/updatePayment/:id',middCustomer.JWT,pay.updatePayment)
 router.delete('/deletePayment/:id',middCustomer.JWT,pay.deleteCard)
-router.get('/getPayment',middCustomer.JWT,pay.getPayment)
+router.get('/getPayment/:id',middCustomer.JWT,pay.getPayment)
 module.exports = router

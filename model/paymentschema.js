@@ -51,7 +51,11 @@ ref:"Customer"
     },
     paymentId: {
         type: String
-    }
+    },
+    isActive:{
+        type:Boolean,
+        default:true
+     }
 });
 
 module.exports = mongoose.model('Payment', PaymentSchema)

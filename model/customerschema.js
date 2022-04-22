@@ -62,7 +62,10 @@ const CustomerSchema = new mongoose.Schema({
         match: [/^(\+?\d{1,3}|\d{1,4})$/gm],
        required: true
     },
-
+    isActive:{
+        type:Boolean,
+        default:true
+     },
 
 
     address:

@@ -8,8 +8,8 @@ var key = require("crypto")
 
 const addPayment = async(req,res)=>{
     try{
-        var customerId = req.query.customerId
-await Payment.findOne({customerId: customerId})
+      //  var customerId = req.query.customerId
+await Payment.findOne({customerId:req.customer})
 {
 
     if(req.body.cardnumber && req.body.cardname && req.body.cardholdername && req.body.cvv && req.body.expdate && (req.body.cardnumber.toString().length)>=16 && (req.body.cardnumber.toString().length)<=16 && req.body.cvv.toString().length>=3 && req.body.cvv.toString().length <=3)
@@ -21,12 +21,12 @@ await Payment.findOne({customerId: customerId})
     var cardholdername = req.body.cardholdername;
     var cvv = req.body.cvv;
     var expdate = req.body.expdate
-    var customerId=req.query.customerId
+    var customerId=req.customer
     
     var paymentId = key.randomBytes(6).toString('hex')
     Payment.findOne({cardnumber:req.body.cardnumber}).then(async(result)=>{
          if(!result){
-              var token =await Customer.find({customerId:customerId})
+              var token =await Customer.find({customerId:req.customer})
      if(token.length!=0){
      
         var data = {
@@ -89,13 +89,13 @@ const updatePayment=async (req,res) => {
     try{
          if(req.body.cardnumber && req.body.cardname && req.body.cardholdername && req.body.cvv && req.body.expdate && (req.body.cardnumber.toString().length)>=16 && (req.body.cardnumber.toString().length)<=16 && req.body.cvv.toString().length>=3 && req.body.cvv.toString().length <=3)
          {
-    await Payment.findOneAndUpdate({paymentId:req.params.key},{$set:{
+    await Payment.findOneAndUpdate({_id:req.params.id},{$set:{
         cardnumber:req.body.cardnumber,
         cardholdername:req.body.cardholdername,
         cardname:req.body.cardname,
         cvv:req.body.cvv,
         expdate:req.body.expdate
-    }},{new:true})
+    }},{new:true,runValidators:true})
 .then((result)=>
     {
         res.json({
@@ -147,7 +147,7 @@ const deleteCard = async(req,res)=>
 
 const getPayment= async(req,res) => {
     try{
-           const cus = await Payment.find()
+           const cus = await Payment.findById(req.params.id)
            res.json({
                status:"true",
                response:cus,

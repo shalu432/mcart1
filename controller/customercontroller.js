@@ -9,6 +9,7 @@ const Otp  = require('../model/otpmodel');
 const jwt = require('jsonwebtoken');
 //const Product = require('../model/productschema')
 const Address = require('../model/addressschema');
+const { ObjectId } = require("bson")
 
 
 const getCustomer= async(req,res) => {
@@ -179,7 +180,7 @@ else{
 const verifyOtp= async(req,res)=>
 {
     try{
-     await Customer.findOne({phoneNumber:req.body.phoneNumber}).then(async()=>{
+     await Customer.findOne({phoneNumber:req.body.phoneNumber}).then(async(result2)=>{
       await Otp.find({ phoneNumber:req.body.phoneNumber})
     .exec()
     .then(data=>
@@ -199,10 +200,11 @@ const verifyOtp= async(req,res)=>
                         })
                     }
                     if(result)
+                    console.log(result2._id);
                     {
                         const token =jwt.sign({
-                            //name:data[0].name,
-                            phoneNumber:data[0].phoneNumber,
+                            id:result2._id,
+                            phoneNumber:result2.phoneNumber,
         
 
                         },
@@ -262,7 +264,7 @@ const verifyOtp= async(req,res)=>
  
  const updateCustomer = async(req,res)=> {
 try{
-         await Customer.findOneAndUpdate({phoneNumber:req.customer},
+         await Customer.findOneAndUpdate({_id:req.customer},
             {
        $set:{
                 firstName: req.body.firstName,
@@ -276,7 +278,6 @@ try{
                  
            }
         },{new:true,runValidators:true}).then((result)=>{
-           // console.log("----+==============>>>>>>>>>>>>>>>>>>>.",result)
             res.json({
                 status:"true",
                 code:200,
@@ -337,11 +338,12 @@ try{
       }
     },{new:true,runValidators:true}).then((result) => res.status(201).json(
       {status:"true",
-      respone:result,
+      
       code:"200",
       errors:{
       },
-      message:"address_updated_succesfully"
+      message:"address_updated_succesfully",
+      respone:result,
     }))
     .catch((err) => res.status(201).json({status:"false",
    // respone:"null",
@@ -375,7 +377,8 @@ try{
 
 const deleteCustomer = async(req,res)=> {
     try{
-        const cus = await Customer.findOneAndDelete(req.customer) 
+        console.log(req.customer);
+        const cus = await Customer.findByIdAndUpdate(ObjectId(req.customer),{$set:{isActive:false}}) 
         res.json({
             status : 200,
             message:"successfully deleted",

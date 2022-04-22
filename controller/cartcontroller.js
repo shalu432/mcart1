@@ -25,7 +25,7 @@ const getAllCart= async(req,res) => {
 }
 const getCart= async(req,res) => {
     try{
-           const cus = await Cart.findById(req.params.id)
+           const cus = await Cart.findOne(req.customer)
            res.json({
                status:true,
           response:cus
@@ -43,11 +43,11 @@ const getCart= async(req,res) => {
 const addProductToCart = async (req, res) => {
 
 try{
-    const customerId= req.body.customerId;
+   // const customerId= req.body.customerId;
      const productId=req.body.productId;
     let data = null;
     const quantity = Number.parseInt(req.body.quantity);
-    let cart = await Cart.findOne({ customerId: customerId});
+    let cart = await Cart.findOne({ customerId:req.customer});
     const productDetails = await Product.findById(productId);
    // console.log(productDetails)
     if(productDetails.quantity>quantity)
@@ -96,7 +96,7 @@ try{
     //------if there is no user with a cart then it creates a new cart and then adds the item to the cart that has been created---------
     else {
         const cartData = {
-            customerId: customerId,
+            customerId:req.customer,
             
             items: [{
                 productId: productId,
@@ -131,7 +131,7 @@ else{
     }
     const deleteCart = async(req, res) => {
       try{
-    await Cart.findOneAndUpdate({customerId :(req.query.customerId)}, { $pull: { items : {productId:(req.query.productId) }}}, {multi: true}).then(data=>{
+    await Cart.findOneAndUpdate({customerId :(req.customer)}, { $pull: { items : {productId:(req.query.productId) }}}, {multi: true}).then(data=>{
         res.json({
             status:"true",
             error:{},
@@ -146,26 +146,7 @@ else{
       }
       }
     
-const pop = async(req,res)=>{
-    var customerId=req.query.customerId;
-   var cart =  await Cart.findOne({customerId:customerId})
-    {
-        const odd = new Cart({
-            customerId:customerId,
-            //productId:cart.productId
 
-        })
-        await odd.save()
-        .then((data)=>
-        {
-            res.json({
-                response:data
-            })
-        })
-
-        
-    }
-}
 
 
 
@@ -176,5 +157,5 @@ module.exports = {
     deleteCart,
     getAllCart,
     getCart,
-   // pop
+   
 }

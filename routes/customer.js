@@ -8,7 +8,7 @@ const cust= require('../controller/customercontroller')
 router.post('/login',cust.loginUser)
 router.get('/getcustomer',cust. getCustomer)
 
-router.post('/addCustomer',middCustomer.JWT,cust.addCustomer)
+router.post('/addCustomer',cust.addCustomer)
 router.post('/verifyOtp',cust.verifyOtp)
 router.put('/updateCustomer',middCustomer.JWT,cust.updateCustomer)
 router.put('/updateAddress',middCustomer.JWT,cust.updateAddress)

@@ -4,8 +4,9 @@ const Merchant = require('../model/merchantschema')
 var bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const Product = require('../model/productschema')
+const Customer = require('../model/customerschema')
 
+const { ObjectId } = require("bson")
 
 
 const addMerchant = async (req, res) => {
@@ -157,9 +158,7 @@ const updateMerchant = async (req, res) => {
                 await Merchant.findOneAndUpdate({_id:req.merchant},
                     {
                         $set: {
-                            // name:req.body.name,
-                            // password:pass
-
+                           
                             firstName: req.body.firstName,
                             lastName: req.body.lastName,
 
@@ -205,14 +204,12 @@ const updateMerchantByAdmin = async (req, res) => {
                 })
             } else {
                 pass = hash;
-                // console.log(pass)
+              
 
                 await Merchant.findByIdAndUpdate({_id:req.params.id},
                     {
                         $set: {
-                            // name:req.body.name,
-                            // password:pass
-
+                           
                             firstName: req.body.firstName,
                             lastName: req.body.lastName,
 
@@ -248,7 +245,7 @@ const updateMerchantByAdmin = async (req, res) => {
 }
 const deleteMerchant = async (req, res) => {
     try {
-        const val = await Merchant.findOneAndDelete(req.merchant)
+        const val = await Merchant.findByIdAndUpdate(ObjectId(req.merchant),{$set:{isActive:false}})
       //  res.json(val)
       res.json({
         status:true,
@@ -264,7 +261,7 @@ const deleteMerchant = async (req, res) => {
 }
 const deleteMerchantByAdmin = async (req, res) => {
     try {
-        const val = await Merchant.findByIdAndDelete(req.params.id)
+        const val = await Merchant.findByIdAndUpdate(ObjectId(req.params.id),{$set:{isActive:false}})
       //  res.json(val)
       res.json({
         status:true,
@@ -278,6 +275,63 @@ const deleteMerchantByAdmin = async (req, res) => {
         })
     }
 }
+
+const blockedCustomerByMerchant=async(req,res)=>
+{
+    
+await Customer.findOne({_id:req.query.id})
+await Merchant.findOneAndUpdate({_id:ObjectId(req.merchant)},{$push:{blockedCustomer:req.query.id}},{new:true})
+.then((data)=>{
+    
+    res.json({
+        status:true,
+        error:{},
+        response:data
+    })
+})
+    .catch(error=>
+        {
+            res.json({
+                status:"false",
+                response:"null",
+                error:error.message
+            })
+        })
+
+
+}
+const unblockedCustomerByMerchant=async(req,res)=>
+{
+
+await Customer.findOne({_id:req.query.id})
+await Merchant.findOneAndUpdate({_id:ObjectId(req.merchant)},{$pull:{blockedCustomer:req.query.id}},{new:true})
+.then((data)=>{
+  
+    res.json({
+        status:true,
+        error:{},
+        response:data
+    })
+})
+    .catch(error=>
+        {
+            res.json({
+                status:"false",
+                response:"null",
+                error:error.message
+            })
+        })
+
+
+}
+
+    
+
+    
+
+
+
+
 module.exports = {
     addMerchant,
     loginMerchant,
@@ -285,5 +339,7 @@ module.exports = {
     updateMerchant,
     deleteMerchant,
    deleteMerchantByAdmin,
-    updateMerchantByAdmin
+    updateMerchantByAdmin,
+    blockedCustomerByMerchant,
+    unblockedCustomerByMerchant
 }

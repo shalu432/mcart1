@@ -15,8 +15,9 @@ var JWT = (req,res,next)=>{
         }
         else{
           
-            req.customer=decoded.phoneNumber
-            
+         //   req.customer=decoded.phoneNumber
+            req.customer=decoded.id
+           // console.log(decoded)
             next();
         }
     }) 
